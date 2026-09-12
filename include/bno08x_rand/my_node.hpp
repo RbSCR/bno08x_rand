@@ -12,13 +12,11 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-#include <cstdio>
+#ifndef BNO08X_RAND__MY_NODE_HPP_
+#define BNO08X_RAND__MY_NODE_HPP_
 
-int main(int argc, char ** argv)
-{
-  (void) argc;
-  (void) argv;
+//
+//
+//
 
-  printf("hello world bno08x_rand package\n");
-  return 0;
-}
+#endif  // BNO08X_RAND__MY_NODE_HPP_
