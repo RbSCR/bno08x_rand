@@ -1,15 +1,18 @@
 <?xml version="1.0"?>
 <?xml-model href="http://download.ros.org/schema/package_format3.xsd" schematypens="http://www.w3.org/2001/XMLSchema"?>
 <package format="3">
-  <name>bno08x_rand</name>
+  <name>bno08x_try_sensor_status</name>
   <version>0.0.0</version>
-  <description>A BNO08x Research and Development package</description>
-  <maintainer email="6249544+RbSCR@users.noreply.github.com">rbscr</maintainer>
+  <description>Research: Try the sensor status from the reports</description>
+  <maintainer email="6249544+RbSCR@users.noreply.github.com">RbSCR</maintainer>
   <license>Apache-2.0</license>
 
   <buildtool_depend>ament_cmake</buildtool_depend>
 
   <depend>bno08x_sh2_libraries</depend>
+  <depend>rclcpp</depend>
+  <depend>sensor_msgs</depend>
+  <depend>std_msgs</depend>
 
   <!-- Only the linters mentioned here will be used in auto-linting: -->
   <!--     cpplint, pep257, xmllint, lint_cmake -->
