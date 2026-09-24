@@ -6,4 +6,12 @@
 ![C++](https://img.shields.io/badge/C++-17-blue?style=flat&logo=cplusplus&logoColor=white)
 ![License](https://img.shields.io/github/license/rbscr/bno08x_rand?label=License)
 
+[![ROS 2 Build](https://github.com/RbSCR/bno08x_rand/actions/workflows/ros2-build.yml/badge.svg)](https://github.com/RbSCR/bno08x_rand/actions/workflows/ros2-build.yml)
+
 ## BNO08x Research & Development repository
+
+Meta reposity with "research" repositories related to the BNO08x IMU sensor.
+
+Ongoing research:
+
+- [bno08x_try_sensor_status](bno08x_try_sensor_status/README.md)
