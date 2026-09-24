@@ -246,21 +246,21 @@ void TrySensorStatusNode::sensor_callback(void * cookie, sh2_SensorValue_t * sen
       this->imu_msg_.orientation.y = sensor_value->un.rotationVector.j;
       this->imu_msg_.orientation.z = sensor_value->un.rotationVector.k;
       this->imu_msg_.orientation.w = sensor_value->un.rotationVector.real;
-      this->mag_msg_.status = sensor_value->status;
+      this->imu_msg_.status = sensor_value->status;
       imu_received_flag_ |= ROTATION_VECTOR_RECEIVED;
       break;
     case SH2_ACCELEROMETER:
       this->imu_msg_.linear_acceleration.x = sensor_value->un.accelerometer.x;
       this->imu_msg_.linear_acceleration.y = sensor_value->un.accelerometer.y;
       this->imu_msg_.linear_acceleration.z = sensor_value->un.accelerometer.z;
-      this->mag_msg_.status = sensor_value->status;
+      this->imu_msg_.status = sensor_value->status;
       imu_received_flag_ |= ACCELEROMETER_RECEIVED;
       break;
     case SH2_GYROSCOPE_CALIBRATED:
       this->imu_msg_.angular_velocity.x = sensor_value->un.gyroscope.x;
       this->imu_msg_.angular_velocity.y = sensor_value->un.gyroscope.y;
       this->imu_msg_.angular_velocity.z = sensor_value->un.gyroscope.z;
-      this->mag_msg_.status = sensor_value->status;
+      this->imu_msg_.status = sensor_value->status;
       imu_received_flag_ |= GYROSCOPE_RECEIVED;
       break;
     default:
