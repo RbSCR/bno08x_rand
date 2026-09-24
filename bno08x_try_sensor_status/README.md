@@ -6,7 +6,7 @@
 ![C++](https://img.shields.io/badge/C++-17-blue?style=flat&logo=cplusplus&logoColor=white)
 ![License](https://img.shields.io/github/license/rbscr/bno08x_rand?label=License)
 
-## bno08x Try sensor status
+## Package bno08x try sensor status
 
 Researching the use of the `status` field from the measurement reports.
 The field indicates the accuracy status of the sensor.
@@ -25,6 +25,12 @@ References
 - BNO08x datasheet ; par 1.3.5.2, par. 3.1.5
 - SH2 Reference manual
 
-## Status / progess
+## Status / progress
 
-- initial node created, does not yet use status field
+- initial node created ~~, does not yet use status field~~
+- created related package `bno08x_imu_msgs`, contains messages with a status field
+- updated ``try_sensor_satatus` node to use the new messages
+
+## Related packages
+
+- [bno08x_imu_msgs](../bno08x_imu_msgs/README.md)

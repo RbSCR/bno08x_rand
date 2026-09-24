@@ -22,8 +22,8 @@
 
 #include "rcl_interfaces/msg/parameter_descriptor.hpp"
 #include "rclcpp/rclcpp.hpp"
-#include "sensor_msgs/msg/imu.hpp"
-#include "sensor_msgs/msg/magnetic_field.hpp"
+#include "bno08x_imu_msgs/msg/imu_with_status.hpp"
+#include "bno08x_imu_msgs/msg/magnetic_field_with_status.hpp"
 
 #include "bno08x/bno08x.hpp"
 #include "bno08x/i2c_interface.hpp"
@@ -50,11 +50,12 @@ private:
   void poll_timer_callback();
   void reset();
 
-  // ROS Publishers
-  rclcpp::Publisher<sensor_msgs::msg::Imu>::SharedPtr imu_publisher_;
-  rclcpp::Publisher<sensor_msgs::msg::MagneticField>::SharedPtr mag_publisher_;
-  sensor_msgs::msg::Imu imu_msg_;
-  sensor_msgs::msg::MagneticField mag_msg_;
+  // ROS Publishers and messages
+  rclcpp::Publisher<bno08x_imu_msgs::msg::ImuWithStatus>::SharedPtr imu_publisher_;
+  rclcpp::Publisher<bno08x_imu_msgs::msg::MagneticFieldWithStatus>::SharedPtr mag_publisher_;
+  bno08x_imu_msgs::msg::ImuWithStatus imu_msg_;
+  bno08x_imu_msgs::msg::MagneticFieldWithStatus mag_msg_;
+
   uint8_t imu_received_flag_;
 
   // ROS Timer
