@@ -1,26 +1,26 @@
 <?xml version="1.0"?>
 <?xml-model href="http://download.ros.org/schema/package_format3.xsd" schematypens="http://www.w3.org/2001/XMLSchema"?>
 <package format="3">
-  <name>bno08x_try_sensor_status</name>
+  <name>bno08x_imu_msgs</name>
   <version>0.0.0</version>
-  <description>Research: Try the sensor status from the reports</description>
+  <description>IMU and magnetic messages with a status field for BMO08x IMU</description>
   <maintainer email="6249544+RbSCR@users.noreply.github.com">RbSCR</maintainer>
   <license>Apache-2.0</license>
 
   <buildtool_depend>ament_cmake</buildtool_depend>
+  <buildtool_depend>rosidl_default_generators</buildtool_depend>
 
-  <depend>bno08x_sh2_libraries</depend>
-  <depend>bno08x_imu_msgs</depend>
-  <depend>rclcpp</depend>
+  <exec_depend>rosidl_default_runtime</exec_depend>
+
   <depend>geometry_msgs</depend>
   <depend>std_msgs</depend>
 
-  <!-- Only the linters mentioned here will be used in auto-linting: -->
-  <!--     cpplint, pep257, xmllint, lint_cmake -->
+  <member_of_group>rosidl_interface_packages</member_of_group>
 
-  <test_depend>ament_cmake_cpplint</test_depend>
+  <!-- Only the linters mentioned here will be used in auto-linting: -->
+  <!--     xmllint, lint_cmake -->
+
   <test_depend>ament_cmake_lint_cmake</test_depend>
-  <test_depend>ament_cmake_pep257</test_depend>
   <test_depend>ament_cmake_xmllint</test_depend>
   <test_depend>ament_lint_auto</test_depend>
 
@@ -28,4 +28,3 @@
     <build_type>ament_cmake</build_type>
   </export>
 </package>
-

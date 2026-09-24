@@ -28,13 +28,13 @@ TrySensorStatusNode::TrySensorStatusNode() : Node("bno08x_try_sensor_status") {
   this->init_sensor();
 
   if (publish_imu_) {
-    this->imu_publisher_ = this->create_publisher<sensor_msgs::msg::Imu>("/imu", 10);
+    this->imu_publisher_ = this->create_publisher<bno08x_imu_msgs::msg::ImuWithStatus>("/imu_with_status", 10);
     RCLCPP_INFO(this->get_logger(), "IMU Publisher created");
     RCLCPP_INFO(this->get_logger(), "IMU Rate: %d", imu_rate_);
   }
 
   if (publish_magnetic_field_) {
-    mag_publisher_ = this->create_publisher<sensor_msgs::msg::MagneticField>("/magnetic_field", 10);
+    mag_publisher_ = this->create_publisher<bno08x_imu_msgs::msg::MagneticFieldWithStatus>("/magnetic_field_with_status", 10);
     RCLCPP_INFO(this->get_logger(), "Magnetic Field Publisher created");
     RCLCPP_INFO(this->get_logger(), "Magnetic Field Rate: %d", magnetic_field_rate_);
   }
@@ -230,6 +230,7 @@ void TrySensorStatusNode::sensor_callback(void * cookie, sh2_SensorValue_t * sen
       this->mag_msg_.magnetic_field.x = sensor_value->un.magneticField.x;
       this->mag_msg_.magnetic_field.y = sensor_value->un.magneticField.y;
       this->mag_msg_.magnetic_field.z = sensor_value->un.magneticField.z;
+      this->mag_msg_.status = sensor_value->status;
       this->mag_msg_.header.frame_id = this->frame_id_;
       this->mag_msg_.header.stamp = this->get_clock()->now();
       // IMU will still return infrequent magnetic field reports even if the report
@@ -243,18 +244,21 @@ void TrySensorStatusNode::sensor_callback(void * cookie, sh2_SensorValue_t * sen
       this->imu_msg_.orientation.y = sensor_value->un.rotationVector.j;
       this->imu_msg_.orientation.z = sensor_value->un.rotationVector.k;
       this->imu_msg_.orientation.w = sensor_value->un.rotationVector.real;
+      this->mag_msg_.status = sensor_value->status;
       imu_received_flag_ |= ROTATION_VECTOR_RECEIVED;
       break;
     case SH2_ACCELEROMETER:
       this->imu_msg_.linear_acceleration.x = sensor_value->un.accelerometer.x;
       this->imu_msg_.linear_acceleration.y = sensor_value->un.accelerometer.y;
       this->imu_msg_.linear_acceleration.z = sensor_value->un.accelerometer.z;
+      this->mag_msg_.status = sensor_value->status;
       imu_received_flag_ |= ACCELEROMETER_RECEIVED;
       break;
     case SH2_GYROSCOPE_CALIBRATED:
       this->imu_msg_.angular_velocity.x = sensor_value->un.gyroscope.x;
       this->imu_msg_.angular_velocity.y = sensor_value->un.gyroscope.y;
       this->imu_msg_.angular_velocity.z = sensor_value->un.gyroscope.z;
+      this->mag_msg_.status = sensor_value->status;
       imu_received_flag_ |= GYROSCOPE_RECEIVED;
       break;
     default:

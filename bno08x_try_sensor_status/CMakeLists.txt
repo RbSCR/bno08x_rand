@@ -8,10 +8,12 @@ endif()
 # find dependencies
 find_package(ament_cmake REQUIRED)
 find_package(bno08x_sh2_libraries REQUIRED)
+find_package(bno08x_imu_msgs REQUIRED)
 find_package(rclcpp REQUIRED)
-find_package(sensor_msgs REQUIRED)
+find_package(geometry_msgs REQUIRED)
 find_package(std_msgs REQUIRED)
 
+# = = = Executable(s) = = =
 
 add_executable(bno08x_try_sensor_status src/bno08x_try_sensor_status.cpp)
 
@@ -24,7 +26,9 @@ target_compile_features(bno08x_try_sensor_status PUBLIC c_std_99 cxx_std_17)  # 
 target_link_libraries(bno08x_try_sensor_status
   ${bno08x_sh2_libraries_TARGETS}
   ${rclcpp_TARGETS}
-  ${sensor_msgs_TARGETS}
+  ${bno08x_imu_msgs_TARGETS}
+  ${geometry_msgs_TARGETS}
+  ${std_msgs_TARGETS}
 )
 
 install(TARGETS bno08x_try_sensor_status
