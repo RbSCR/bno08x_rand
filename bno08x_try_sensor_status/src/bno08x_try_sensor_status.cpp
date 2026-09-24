@@ -28,13 +28,15 @@ TrySensorStatusNode::TrySensorStatusNode() : Node("bno08x_try_sensor_status") {
   this->init_sensor();
 
   if (publish_imu_) {
-    this->imu_publisher_ = this->create_publisher<bno08x_imu_msgs::msg::ImuWithStatus>("/imu_with_status", 10);
+    this->imu_publisher_ =
+      this->create_publisher<bno08x_imu_msgs::msg::ImuWithStatus>("/imu_with_status", 10);
     RCLCPP_INFO(this->get_logger(), "IMU Publisher created");
     RCLCPP_INFO(this->get_logger(), "IMU Rate: %d", imu_rate_);
   }
 
   if (publish_magnetic_field_) {
-    mag_publisher_ = this->create_publisher<bno08x_imu_msgs::msg::MagneticFieldWithStatus>("/magnetic_field_with_status", 10);
+    mag_publisher_ = this->create_publisher<bno08x_imu_msgs::msg::MagneticFieldWithStatus>(
+      "/magnetic_field_with_status", 10);
     RCLCPP_INFO(this->get_logger(), "Magnetic Field Publisher created");
     RCLCPP_INFO(this->get_logger(), "Magnetic Field Rate: %d", magnetic_field_rate_);
   }
