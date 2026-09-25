@@ -28,8 +28,13 @@ References
 ## Status / progress
 
 - initial node created ~~, does not yet use status field~~
-- created related package `bno08x_imu_msgs`, contains messages with a status field
+- created related package `bno08x_imu_msgs`, contains messages with a status field for each of the sensor types
 - updated ``try_sensor_satatus` node to use the new messages
+
+### Todo
+
+- determine how to get/read the current calibration settings
+- determine how to change the calibration settings for each of the sensor types
 
 ## Related packages
 
