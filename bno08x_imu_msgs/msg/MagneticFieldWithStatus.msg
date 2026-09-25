@@ -19,8 +19,8 @@ geometry_msgs/Vector3 magnetic_field # x, y, and z components of the
                                            # If your sensor does not output 3 axes,
                                            # put NaNs in the components not reported.
 
-float64[9] magnetic_field_covariance       # Row major about x, y, z axes
+float64[9] magnetic_field_covariance  # Row major about x, y, z axes
                                            # 0 is interpreted as variance unknown
 
-int8 status                                # status (i.e accuracy) indication
+int8 magnetic_field_status            # status (i.e accuracy) indication
                                            # 0 unreliable, 1 low, 2 medium, 4 high

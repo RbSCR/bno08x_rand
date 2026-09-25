@@ -12,8 +12,6 @@
   <depend>bno08x_sh2_libraries</depend>
   <depend>bno08x_imu_msgs</depend>
   <depend>rclcpp</depend>
-  <depend>geometry_msgs</depend>
-  <depend>std_msgs</depend>
 
   <!-- Only the linters mentioned here will be used in auto-linting: -->
   <!--     cpplint, pep257, xmllint, lint_cmake -->

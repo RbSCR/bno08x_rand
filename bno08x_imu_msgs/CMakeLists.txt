@@ -17,6 +17,7 @@ rosidl_generate_interfaces(${PROJECT_NAME}
   "msg/ImuWithStatus.msg"
   "msg/MagneticFieldWithStatus.msg"
   DEPENDENCIES geometry_msgs std_msgs # Add packages that above messages depend on
+  ADD_LINTER_TESTS
 )
 
 if(BUILD_TESTING)
