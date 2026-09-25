@@ -22,6 +22,7 @@
 
 #include "rcl_interfaces/msg/parameter_descriptor.hpp"
 #include "rclcpp/rclcpp.hpp"
+
 #include "bno08x_imu_msgs/msg/imu_with_status.hpp"
 #include "bno08x_imu_msgs/msg/magnetic_field_with_status.hpp"
 
@@ -30,11 +31,6 @@
 #include "bno08x/spi_interface.hpp"
 #include "bno08x/uart_interface.hpp"
 #include "bno08x/watchdog.hpp"
-
-// #include "bno08x_driver/bno08x.hpp"
-// #include "bno08x_driver/logger.h"
-// #include "bno08x_driver/watchdog.hpp"
-// #include "sh2/sh2.h"
 
 class TrySensorStatusNode : public rclcpp::Node
 {

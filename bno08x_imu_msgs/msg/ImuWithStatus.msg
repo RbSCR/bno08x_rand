@@ -18,12 +18,13 @@ std_msgs/Header header
 
 geometry_msgs/Quaternion orientation
 float64[9] orientation_covariance         # Row major about x, y, z axes
+int8 orientation_status                   # status (i.e accuracy) indication
+                                              # 0 unreliable, 1 low, 2 medium, 4 high
 
 geometry_msgs/Vector3 angular_velocity
 float64[9] angular_velocity_covariance    # Row major about x, y, z axes
+int8 angular_velocity_status              # status (i.e accuracy) indication, see above
 
 geometry_msgs/Vector3 linear_acceleration
 float64[9] linear_acceleration_covariance # Row major x, y z
-
-int8 status                               # status (i.e accuracy) indication
-                                          # 0 unreliable, 1 low, 2 medium, 4 high
+int8 linear_acceleration_status           # status (i.e accuracy) indication, see above
