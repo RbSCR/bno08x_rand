@@ -1,0 +1,7 @@
+
+int8 calibration_config   # Calibration configuration, indicates which sensors to calibrate
+                          # 1 : Accel, 2 : Gyro, 4 : Mag, (8 : Planar  currently not used)
+                          # Values can be combined/added, i.e. 3 = 1 + 2 = Accel and Gyro
+---
+bool success              # True if the call succeeded, false otherwise
+string status_message     # Details about success
