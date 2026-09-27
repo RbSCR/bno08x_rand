@@ -11,6 +11,7 @@
 
   <depend>bno08x_sh2_libraries</depend>
   <depend>bno08x_imu_msgs</depend>
+  <depend>bno08x_imu_srvs</depend>
   <depend>rclcpp</depend>
 
   <!-- Only the linters mentioned here will be used in auto-linting: -->

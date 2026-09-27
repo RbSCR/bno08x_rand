@@ -17,6 +17,7 @@
 
 #include <chrono>
 #include <functional>
+#include <memory>
 #include <mutex>
 #include <string>
 
@@ -26,11 +27,15 @@
 #include "bno08x_imu_msgs/msg/imu_with_status.hpp"
 #include "bno08x_imu_msgs/msg/magnetic_field_with_status.hpp"
 
+#include "bno08x_imu_srvs/srv/calibrate_sensors.hpp"
+
 #include "bno08x/bno08x.hpp"
 #include "bno08x/i2c_interface.hpp"
 #include "bno08x/spi_interface.hpp"
 #include "bno08x/uart_interface.hpp"
 #include "bno08x/watchdog.hpp"
+
+// using CalibrateSensors = bno08x_srvs::srv::CalibrateSensors;
 
 class TrySensorStatusNode : public rclcpp::Node
 {
@@ -43,8 +48,14 @@ private:
   void init_comms();
   void init_parameters();
   void init_sensor();
+  void create_services();
+
   void poll_timer_callback();
   void reset();
+
+  void handle_calibrate_sensors_request(
+    const std::shared_ptr<bno08x_imu_srvs::srv::CalibrateSensors::Request> request,
+    std::shared_ptr<bno08x_imu_srvs::srv::CalibrateSensors::Response> response);
 
   // ROS Publishers and messages
   rclcpp::Publisher<bno08x_imu_msgs::msg::ImuWithStatus>::SharedPtr imu_publisher_;
@@ -75,6 +86,9 @@ private:
   bool publish_orientation_;
   bool publish_acceleration_;
   bool publish_angular_velocity_;
+
+  /// Service server for calibrate sensors
+  rclcpp::Service<bno08x_imu_srvs::srv::CalibrateSensors>::SharedPtr srv_;
 };
 
 #endif  // BNO08X_TRY_SENSOR_STATUS__BNO08X_TRY_SENSOR_STATUS_HPP_

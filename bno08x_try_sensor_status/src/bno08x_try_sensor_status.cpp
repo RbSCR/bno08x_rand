@@ -27,6 +27,8 @@ TrySensorStatusNode::TrySensorStatusNode() : Node("bno08x_try_sensor_status") {
   this->init_comms();
   this->init_sensor();
 
+  this->create_services();
+
   if (publish_imu_) {
     this->imu_publisher_ =
       this->create_publisher<bno08x_imu_msgs::msg::ImuWithStatus>("/imu_with_status", 10);
@@ -291,10 +293,49 @@ void TrySensorStatusNode::poll_timer_callback() {
   }
 }
 
+/**
+ * @brief Reset the sensor
+ *
+ */
 void TrySensorStatusNode::reset() {
   std::lock_guard<std::mutex> lock(bno08x_mutex_);
   delete bno08x_;
   this->init_sensor();
+}
+
+/**
+ * @brief Create the services for this node
+ *
+ * Service(s) for:
+ * - CalibrateSensors
+ *
+ */
+void TrySensorStatusNode::create_services() {
+  srv_ = this->create_service<bno08x_imu_srvs::srv::CalibrateSensors>(
+    "/calibrate_sensors", std::bind(
+                            &TrySensorStatusNode::handle_calibrate_sensors_request, this,
+                            std::placeholders::_1, std::placeholders::_2));
+}
+
+/**
+ * @brief Handle request of the "calibrate sensors" service
+ *
+ * @param request   service request
+ * @param response  service response
+ */
+void TrySensorStatusNode::handle_calibrate_sensors_request(
+  const std::shared_ptr<bno08x_imu_srvs::srv::CalibrateSensors::Request> request,
+  std::shared_ptr<bno08x_imu_srvs::srv::CalibrateSensors::Response> response) {
+  // HACK(rbscr) Log start and end of the service during testing
+  RCLCPP_INFO(this->get_logger(), "Start sensor calibration");
+
+  // TODO(rbscr) actual call(s) for sensor calibration
+  // input is in request->calibration_config
+
+  response->success = true;
+  response->status_message = "Ok";
+
+  RCLCPP_INFO(this->get_logger(), "End sensor calibration");
 }
 
 int main(int argc, char ** argv) {

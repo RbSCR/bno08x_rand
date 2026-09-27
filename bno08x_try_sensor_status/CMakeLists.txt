@@ -9,6 +9,7 @@ endif()
 find_package(ament_cmake REQUIRED)
 find_package(bno08x_sh2_libraries REQUIRED)
 find_package(bno08x_imu_msgs REQUIRED)
+find_package(bno08x_imu_srvs REQUIRED)
 find_package(rclcpp REQUIRED)
 
 # = = = Executable(s) = = =
@@ -25,6 +26,7 @@ target_link_libraries(bno08x_try_sensor_status
   ${bno08x_sh2_libraries_TARGETS}
   ${rclcpp_TARGETS}
   ${bno08x_imu_msgs_TARGETS}
+  ${bno08x_imu_srvs_TARGETS}
 )
 
 install(TARGETS bno08x_try_sensor_status

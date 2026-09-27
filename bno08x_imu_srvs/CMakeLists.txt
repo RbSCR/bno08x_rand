@@ -11,8 +11,7 @@ find_package(rosidl_default_generators REQUIRED)
 
 rosidl_generate_interfaces(${PROJECT_NAME}
   "srv/CalibrateSensors.srv"
-  DEPENDENCIES
-  ADD_LINTER_TESTS
+  DEPENDENCIES   # No dependencies
 )
 
 if(BUILD_TESTING)

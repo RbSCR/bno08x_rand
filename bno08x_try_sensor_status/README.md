@@ -29,7 +29,9 @@ References
 
 - initial node created ~~, does not yet use status field~~
 - created related package `bno08x_imu_msgs`, contains messages with a status field for each of the sensor types
-- updated ``try_sensor_satatus` node to use the new messages
+- updated `try_sensor_status` node to use the new messages
+- created related package `bno08x_imu_srvs`, contains service to calibrate the sensors
+- updated `try_sensor_status` node to use the new service, service does not yet do any calibration
 
 ### Todo
 
@@ -39,3 +41,4 @@ References
 ## Related packages
 
 - [bno08x_imu_msgs](../bno08x_imu_msgs/README.md)
+- [bno08x_imu_srvs](../bno08x_imu_srvs/README.md)
