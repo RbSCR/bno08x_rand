@@ -31,14 +31,16 @@ References
 - created related package `bno08x_imu_msgs`, contains messages with a status field for each of the sensor types
 - updated `try_sensor_status` node to use the new messages
 - created related package `bno08x_imu_srvs`, contains service to calibrate the sensors
-- updated `try_sensor_status` node to use the new service, service does not yet do any calibration
+- updated `try_sensor_status` node to use the new service ~~, service does not yet do any calibration~~
+- opdated `try_sensor_status` node, service now uses the getCalibrationConfig and setCalibrationConfig methods of the BNO08x library
 
 ### Todo
 
-- determine how to get/read the current calibration settings
-- determine how to change the calibration settings for each of the sensor types
+- determine how to change and display the calibration settings for each of the sensor types in more user friendly way
 
-## Related packages
+## Related (research) packages
 
 - [bno08x_imu_msgs](../bno08x_imu_msgs/README.md)
 - [bno08x_imu_srvs](../bno08x_imu_srvs/README.md)
+
+See `package.xml` and/or `CMakeLists.txt` for other related/used packages.

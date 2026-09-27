@@ -326,16 +326,41 @@ void TrySensorStatusNode::create_services() {
 void TrySensorStatusNode::handle_calibrate_sensors_request(
   const std::shared_ptr<bno08x_imu_srvs::srv::CalibrateSensors::Request> request,
   std::shared_ptr<bno08x_imu_srvs::srv::CalibrateSensors::Response> response) {
-  // HACK(rbscr) Log start and end of the service during testing
-  RCLCPP_INFO(this->get_logger(), "Start sensor calibration");
+  // - - -
 
-  // TODO(rbscr) actual call(s) for sensor calibration
-  // input is in request->calibration_config
+  // HACK(rbscr) Log start and progress of the service during testing
+  RCLCPP_INFO(this->get_logger(), "Sensor calibration");
 
+  // ENHANCEMENT(rbscr)  Also support PLANAR calibration ?
+  // Currently support for configuration of Accel, Gyro, Mag or any combination of these 3
+  if (request->calibration_config >= 8) {
+    RCLCPP_INFO(
+      this->get_logger(), "Request value (%d) is not supported", request->calibration_config);
+    response->success = false;
+    response->status_message = "Not supported value";
+    return;
+  }
+
+  RCLCPP_INFO(this->get_logger(), "Valid request value: %d", request->calibration_config);
+
+  uint8_t current_config = 0;
+  if (!this->bno08x_->getCalibrationConfig(&current_config)) {
+    RCLCPP_ERROR(this->get_logger(), "Failed to get current calibration config");
+  } else {
+    RCLCPP_INFO(this->get_logger(), "Current calibration config: %d", current_config);
+  }
+
+  uint8_t new_config = request->calibration_config;
+  if (!this->bno08x_->setCalibrationConfig(new_config)) {
+    RCLCPP_ERROR(this->get_logger(), "Failed to set calibration config");
+    response->success = false;
+    response->status_message = "Set calibration config failed";
+    return;
+  }
+
+  RCLCPP_INFO(this->get_logger(), "Calibration config set to: %d", new_config);
   response->success = true;
   response->status_message = "Ok";
-
-  RCLCPP_INFO(this->get_logger(), "End sensor calibration");
 }
 
 int main(int argc, char ** argv) {
