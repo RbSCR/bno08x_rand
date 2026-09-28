@@ -7,11 +7,14 @@
 
 ## Package bno08x imu services
 
-Support package, defines the service(s) for the `bno08x_try_sensor_status` package.
+Support package, defines the service(s) for the `bno08x_try_sensor_status` package:
+
+- SetSensorsCalibration
 
 ## Status / progess
 
 - service `CalibrateSensors` created
+- service `CalibrateSensors` renamed to `SetSensorsCalibration`
 
 ## Related to research
 

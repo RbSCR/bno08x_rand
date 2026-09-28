@@ -33,6 +33,7 @@ References
 - created related package `bno08x_imu_srvs`, contains service to calibrate the sensors
 - updated `try_sensor_status` node to use the new service ~~, service does not yet do any calibration~~
 - opdated `try_sensor_status` node, service now uses the getCalibrationConfig and setCalibrationConfig methods of the BNO08x library
+- updated `try_sensor_status` node, now used the (renamed) `SetSensorsCalibration` service
 
 ### Todo
 

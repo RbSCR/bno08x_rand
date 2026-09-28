@@ -27,7 +27,7 @@
 #include "bno08x_imu_msgs/msg/imu_with_status.hpp"
 #include "bno08x_imu_msgs/msg/magnetic_field_with_status.hpp"
 
-#include "bno08x_imu_srvs/srv/calibrate_sensors.hpp"
+#include "bno08x_imu_srvs/srv/set_sensors_calibration.hpp"
 
 #include "bno08x/bno08x.hpp"
 #include "bno08x/i2c_interface.hpp"
@@ -53,9 +53,10 @@ private:
   void poll_timer_callback();
   void reset();
 
-  void handle_calibrate_sensors_request(
-    const std::shared_ptr<bno08x_imu_srvs::srv::CalibrateSensors::Request> request,
-    std::shared_ptr<bno08x_imu_srvs::srv::CalibrateSensors::Response> response);
+  // ROS services
+  void handle_set_sensors_calibration_request(
+    const std::shared_ptr<bno08x_imu_srvs::srv::SetSensorsCalibration::Request> request,
+    std::shared_ptr<bno08x_imu_srvs::srv::SetSensorsCalibration::Response> response);
 
   // ROS Publishers and messages
   rclcpp::Publisher<bno08x_imu_msgs::msg::ImuWithStatus>::SharedPtr imu_publisher_;
@@ -87,8 +88,9 @@ private:
   bool publish_acceleration_;
   bool publish_angular_velocity_;
 
-  /// Service server for calibrate sensors
-  rclcpp::Service<bno08x_imu_srvs::srv::CalibrateSensors>::SharedPtr srv_;
+  /// Service server for SetSensorsCalibration
+  rclcpp::Service<bno08x_imu_srvs::srv::SetSensorsCalibration>::SharedPtr
+    srv_set_sensors_calibration_;
 };
 
 #endif  // BNO08X_TRY_SENSOR_STATUS__BNO08X_TRY_SENSOR_STATUS_HPP_
