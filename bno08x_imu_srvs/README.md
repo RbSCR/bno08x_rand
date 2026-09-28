@@ -9,12 +9,14 @@
 
 Support package, defines the service(s) for the `bno08x_try_sensor_status` package:
 
+- GetSensorsCalibration
 - SetSensorsCalibration
 
 ## Status / progess
 
 - service `CalibrateSensors` created
 - service `CalibrateSensors` renamed to `SetSensorsCalibration`
+- service `GetSensorsCalibration` created
 
 ## Related to research
 
