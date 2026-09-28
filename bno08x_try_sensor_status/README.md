@@ -1,7 +1,7 @@
 
 # bno08x_try_sensor_status
 
-![Project Status](https://img.shields.io/badge/Status-Work%20In%20Progress-orange)
+![Project Status](https://img.shields.io/badge/Status-Finished-green)
 ![ROS 2](https://img.shields.io/badge/ROS%202-Jazzy%20|%20Kilted%20(Ubuntu%2024.04)-blue?style=flat&logo=ros&logoSize=auto)
 ![C++](https://img.shields.io/badge/C++-17-blue?style=flat&logo=cplusplus&logoColor=white)
 ![License](https://img.shields.io/github/license/rbscr/bno08x_rand?label=License)
@@ -9,7 +9,7 @@
 ## Package bno08x try sensor status
 
 Researching the use of the `status` field from the measurement reports.
-The field indicates the accuracy status of the sensor.
+The field indicates the accuracy status of the sensor and could be used to dynamical determine the covariences of the sensors.
 
 | Value | Description |
 | ----------- | ----------- |
@@ -36,14 +36,25 @@ References
 - updated `try_sensor_status` node, now used the (renamed) `SetSensorsCalibration` service
 - added `GetSensorsCalibration` service
 - removed the logging of the current calibration config in the `SetSensorsCalibration` service
+- removed info-logging (was used for testing)
 
-### Todo
+## Conclusion
 
-- determine how to change and display the calibration settings for each of the sensor types in more user friendly way
+- The status field is available from the measurement reports and could be used to determine the covariances of the sensors.
+- Setting the calibration config for all 3 sensors has a positive effect on the status (i.e. accuracy) values.
+- Moving the IMU has a positive effect on the status (i.e. accuracy) of the magnetometer
+  - Without moving the magnetometer status remains 0.
 
-## Related (research) packages
+## Next
+
+In the ROS Control hardware-interface research
+
+- passing the status field to the controller in the state interface
+- and using the status field to set/determine the covariance values either in the controller or in the imu-broadcaster
+
+## Related research packages
 
 - [bno08x_imu_msgs](../bno08x_imu_msgs/README.md)
 - [bno08x_imu_srvs](../bno08x_imu_srvs/README.md)
 
-See `package.xml` and/or `CMakeLists.txt` for other related/used packages.
+See `package.xml` and/or `CMakeLists.txt` for other used packages.
