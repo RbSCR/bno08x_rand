@@ -313,14 +313,16 @@ void TrySensorStatusNode::reset() {
  */
 void TrySensorStatusNode::create_services() {
   srv_get_sensors_calibration_ = this->create_service<bno08x_imu_srvs::srv::GetSensorsCalibration>(
-    "/get_sensors_calibration", std::bind(
-                                  &TrySensorStatusNode::handle_get_sensors_calibration_request,
-                                  this, std::placeholders::_1, std::placeholders::_2));
+    "/bno08x_try_sensor_status/get_sensors_calibration",
+    std::bind(
+      &TrySensorStatusNode::handle_get_sensors_calibration_request, this, std::placeholders::_1,
+      std::placeholders::_2));
 
   srv_set_sensors_calibration_ = this->create_service<bno08x_imu_srvs::srv::SetSensorsCalibration>(
-    "/set_sensors_calibration", std::bind(
-                                  &TrySensorStatusNode::handle_set_sensors_calibration_request,
-                                  this, std::placeholders::_1, std::placeholders::_2));
+    "/bno08x_try_sensor_status/set_sensors_calibration",
+    std::bind(
+      &TrySensorStatusNode::handle_set_sensors_calibration_request, this, std::placeholders::_1,
+      std::placeholders::_2));
 }
 
 /**
@@ -333,9 +335,6 @@ void TrySensorStatusNode::create_services() {
 void TrySensorStatusNode::handle_get_sensors_calibration_request(
   const std::shared_ptr<bno08x_imu_srvs::srv::GetSensorsCalibration::Request> request,
   std::shared_ptr<bno08x_imu_srvs::srv::GetSensorsCalibration::Response> response) {
-  // HACK(rbscr) Log start and progress of the service during testing
-  RCLCPP_INFO(this->get_logger(), "Service Get sensor calibration");
-
   (void)request;  // explicitly discard — it's empty
 
   uint8_t current_config = 0;
@@ -345,8 +344,6 @@ void TrySensorStatusNode::handle_get_sensors_calibration_request(
     response->status_message = "Get sensors calibration failed";
     return;
   }
-
-  RCLCPP_INFO(this->get_logger(), "Current sensor calibration : %d", current_config);
 
   response->calibration_config = current_config;
   response->success = true;
@@ -362,20 +359,13 @@ void TrySensorStatusNode::handle_get_sensors_calibration_request(
 void TrySensorStatusNode::handle_set_sensors_calibration_request(
   const std::shared_ptr<bno08x_imu_srvs::srv::SetSensorsCalibration::Request> request,
   std::shared_ptr<bno08x_imu_srvs::srv::SetSensorsCalibration::Response> response) {
-  // HACK(rbscr) Log start and progress of the service during testing
-  RCLCPP_INFO(this->get_logger(), "Sensor calibration");
-
   // Currently support for configuration of Accel, Gyro, Mag or any combination of these 3.
   // No support for PLANAR.
   if (request->calibration_config >= 8) {
-    RCLCPP_INFO(
-      this->get_logger(), "Request value (%d) is not supported", request->calibration_config);
     response->success = false;
     response->status_message = "Not supported value";
     return;
   }
-
-  RCLCPP_INFO(this->get_logger(), "Valid request value: %d", request->calibration_config);
 
   uint8_t new_config = request->calibration_config;
   if (!this->bno08x_->setCalibrationConfig(new_config)) {
@@ -385,7 +375,6 @@ void TrySensorStatusNode::handle_set_sensors_calibration_request(
     return;
   }
 
-  RCLCPP_INFO(this->get_logger(), "Sensor calibration set to: %d", new_config);
   response->success = true;
   response->status_message = "Ok";
 }
