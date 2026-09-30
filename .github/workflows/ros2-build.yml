@@ -7,7 +7,7 @@ on:
     branches: [ main ]
 
 env:
-  MY_PACKAGES: bno08x_try_sensor_status
+  MY_PACKAGES: bno08x_try_sensor_status bno08x_try_hal_dynamic_covariance
 
 jobs:
   build-and-test:

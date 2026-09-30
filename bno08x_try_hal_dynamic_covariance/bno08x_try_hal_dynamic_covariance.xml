@@ -1,0 +1,11 @@
+<?xml version="1.0"?>
+<library path="bno08x_try_hal_dynamic_covariance">
+  <class
+    name="bno08x_try_hal_dynamic_covariance/BNO08XTryHalDynamicCovariance"
+    type="bno08x_try_hal_dynamic_covariance::BNO08XTryHalDynamicCovariance"
+    base_class_type="hardware_interface::SensorInterface">
+    <description>
+      ros2_control SensorInterface plugin for the CEVA BNO08x IMU's over I2C with dynamic covariance.
+    </description>
+  </class>
+</library>

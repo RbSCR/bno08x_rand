@@ -1,0 +1,78 @@
+<?xml version="1.0"?>
+<robot xmlns:xacro="http://www.ros.org/wiki/xacro" name="bno08x_imu">
+
+  <!-- copied (and adapted) from bno055_hardware_interface (github.com/adityakamath) -->
+
+  <!-- Arguments -->
+  <xacro:arg name="i2c_bus"             default="1"/>
+  <xacro:arg name="i2c_addr"            default="4A"/>    <!-- hex, no 0x prefix: 4A = 0x4A -->
+  <xacro:arg name="axis_remap"          default="East-North-Up"/>  <!-- See BNO08X datasheet Figure 4-3  page 41 -->
+  <xacro:arg name="imu_rate"            default="100"/>   <!-- See BNO08X datasheet Figure 6-16 page 50-->
+  <xacro:arg name="enable_magnetometer" default="true"/>
+  <xacro:arg name="magnetometer_rate"   default="100"/>   <!-- See BNO08X datasheet Figure 6-16 page 50-->
+  <xacro:arg name="enable_mock_mode"    default="false"/>
+
+  <!-- Robot links -->
+  <link name="base_link"/>
+
+  <link name="imu_link"/>
+
+  <link name="imu_frame"/>
+
+  <!-- base_link -> imu_link (adjust origin for your mounting position) -->
+  <joint name="imu_joint" type="fixed">
+    <parent link="base_link"/>
+    <child link="imu_link"/>
+    <origin xyz="0 0 0" rpy="0 0 0"/>
+  </joint>
+
+  <!-- imu_link -> imu_frame (zero offset; imu_frame is the sensor measurement frame) -->
+  <joint name="imu_frame_joint" type="fixed">
+    <parent link="imu_link"/>
+    <child link="imu_frame"/>
+    <origin xyz="0 0 0" rpy="0 0 0"/>
+  </joint>
+
+  <!-- ros2_control sensor block -->
+  <ros2_control name="bno08x_sensor" type="sensor">
+    <hardware>
+      <plugin>bno08x_try_hal_dynamic_covariance/BNO08XTryHalDynamicCovariance</plugin>
+
+      <!-- I2C Parameters -->
+      <param name="i2c_bus">$(arg i2c_bus)</param>    <!-- I2C bus (default: 1 >> /dev/i2c-1) -->
+      <param name="i2c_addr">$(arg i2c_addr)</param>  <!-- I2C address in hex, no 0x prefix (default: 28 = 0x28) -->
+
+      <!-- Sensor Configuration -->
+      <param name="axis_remap">$(arg axis_remap)</param>     <!-- Axis placement config -->
+      <param name="imu_rate">$(arg imu_rate)</param>
+      <param name="enable_magnetometer">$(arg enable_magnetometer)</param>
+      <param name="magnetometer_rate">$(arg magnetometer_rate)</param>
+
+      <param name="enable_mock_mode">$(arg enable_mock_mode)</param>   <!-- Simulation mode, no hardware required (default: false) -->
+    </hardware>
+
+    <sensor name="bno08x">
+      <!-- Orientation (quaternion, unit norm) -->
+      <state_interface name="orientation.x"/>
+      <state_interface name="orientation.y"/>
+      <state_interface name="orientation.z"/>
+      <state_interface name="orientation.w"/>
+
+      <!-- Angular velocity (rad/s) -->
+      <state_interface name="angular_velocity.x"/>
+      <state_interface name="angular_velocity.y"/>
+      <state_interface name="angular_velocity.z"/>
+
+      <!-- Linear acceleration (m/s²), gravity-compensated -->
+      <state_interface name="linear_acceleration.x"/>
+      <state_interface name="linear_acceleration.y"/>
+      <state_interface name="linear_acceleration.z"/>
+
+      <!-- Magnetic field (micro Tesla)  -->
+      <state_interface name="magnetic_field.x"/>
+      <state_interface name="magnetic_field.y"/>
+      <state_interface name="magnetic_field.z"/>
+    </sensor>
+  </ros2_control>
+
+</robot>
