@@ -14,4 +14,8 @@ Meta reposity with "research" repositories related to the BNO08x IMU sensor.
 
 Ongoing research:
 
+- [bno08x_try_hal_dynamic_covariance](bno08x_try_hal_dynamic_covariance/README.md)
+
+Finished research:
+
 - [bno08x_try_sensor_status](bno08x_try_sensor_status/README.md)
