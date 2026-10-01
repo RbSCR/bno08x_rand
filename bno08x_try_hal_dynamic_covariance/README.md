@@ -47,15 +47,21 @@ See original package.
 | `orientation.y` | – | Quaternion Y |
 | `orientation.z` | – | Quaternion Z |
 | `orientation.w` | – | Quaternion W |
+| **`orientation.status`** | – | **Status** |
 | `angular_velocity.x` | rad/s | Gyroscope X |
 | `angular_velocity.y` | rad/s | Gyroscope Y |
 | `angular_velocity.z` | rad/s | Gyroscope Z |
+| **`angular_velocity.status`** | - | **Gyroscope status** |
 | `linear_acceleration.x` | m/s² | Accelerometer X |
 | `linear_acceleration.y` | m/s² | Accelerometer Y |
 | `linear_acceleration.z` | m/s² | Accelerometer Z |
+| **`linear_acceleration.status`** | - | **Accelerometer status** |
 | `magnetic_field.x` | Tesla | Magnetometer X - when magnetometer enabled |
 | `magnetic_field.y` | Tesla | Magnetometer Y - when magnetometer enabled |
 | `magnetic_field.z` | Tesla | Magnetometer Z - when magnetometer enabled |
+| **`magnetic_field.status`** | - | **Magnetometer status** - when magnetometer enabled |
+
+New state interfaces marked **bold**.
 
 ## Launch files and parameters
 
@@ -115,10 +121,11 @@ The IMU measurements (orientation, angular velocity and linear acceleration) are
 | `publish_tf` | `bool` | `"true"` | Publish a dynamic world→base_link TF from IMU orientation for RViz visualization |
 | `broadcast_magnetometer` | `bool` | `"true"` | Broadcast magnetometer measurements using the magnetometer_broadcaster. To be usefull also set enable_magnetometer to true |
 
-The hardware parameters -[see the hardware parameter table](#hardware-parameters)- can also be used/set in the launch files `bno08x.launch.py` and `bno08x_magnetometer.launch.py` to overrule the defaults set in the related `urdf.xacro`-file.
+The hardware parameters (see the hardware parameter table in original package) can also be used/set in the launch files `bno08x.launch.py` and `bno08x_magnetometer.launch.py` to overrule the defaults set in the related `urdf.xacro`-file.
 
 ## Research status / progress
 
-- created package, no research enhancements yet, same functionality as original package
+- created package~~, no research enhancements yet, same functionality as original package~~
+- added status field (.cpp/.hpp , urdf.xacro's , cpp-test)
 
 ## Related research packages

@@ -270,21 +270,27 @@ private:
   // Watchdog
   Watchdog * watchdog_;
 
-  // State storage for imu_sensor - always -- 10 interfaces
+  // State storage for imu_sensor - always --
+  // 13 total :10 'standard' (x/y/z/w) and 3 additional status interfaces
   double hw_orientation_x_{0.0};
   double hw_orientation_y_{0.0};
   double hw_orientation_z_{0.0};
   double hw_orientation_w_{1.0};
+  double hw_orientation_status_{0.0};
   double hw_angular_velocity_x_{0.0};
   double hw_angular_velocity_y_{0.0};
   double hw_angular_velocity_z_{0.0};
+  double hw_angular_velocity_status_{0.0};
   double hw_linear_acceleration_x_{0.0};
   double hw_linear_acceleration_y_{0.0};
   double hw_linear_acceleration_z_{0.0};
-  // State storage for magnetometer - optional -- 3 interfaces
+  double hw_linear_acceleration_status_{0.0};
+  // State storage for magnetometer - optional --
+  // 4 total : 3 'standard' (x/y/z) and 1 additional status interface
   double hw_magnetic_field_x_{0.0};
   double hw_magnetic_field_y_{0.0};
   double hw_magnetic_field_z_{0.0};
+  double hw_magnetic_field_status_{0.0};
 
   const double microtesla_to_tesla_{1e-6};
 };
