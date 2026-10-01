@@ -6,6 +6,10 @@ controller_manager:
     imu_sensor_broadcaster:
       type: imu_sensor_broadcaster/IMUSensorBroadcaster
 
+    # State Interfaces Broadcaster - Publishes the state interfaces
+    state_interfaces_broadcaster:
+      type: state_interfaces_broadcaster/StateInterfacesBroadcaster
+
 # IMU Sensor Broadcaster configuration
 # Reads orientation, angular_velocity and linear_acceleration state interfaces
 # and publishes sensor_msgs/Imu to /imu_sensor_broadcaster/imu at 100 Hz.
@@ -74,3 +78,9 @@ imu_sensor_broadcaster:
     #   roll:  0.0  # radians
     #   pitch: 0.0  # radians
     #   yaw:   0.0  # radians
+
+# State Interfaces Broadcaster configuration
+# Publishes the state interfaces mentioned in the ros-parameters below
+state_interfaces_broadcaster:
+  ros__parameters:
+    interfaces: ["bno08x/orientation.status", "bno08x/angular_velocity.status", "bno08x/linear_acceleration.status"]

@@ -10,6 +10,10 @@ controller_manager:
     magnetometer_broadcaster:
       type: magnetometer_broadcaster/MagnetometerBroadcaster
 
+    # State Interfaces Broadcaster - Publishes the state interfaces
+    state_interfaces_broadcaster:
+      type: state_interfaces_broadcaster/StateInterfacesBroadcaster
+
 # IMU Sensor Broadcaster configuration
 # Reads orientation, angular_velocity and linear_acceleration state interfaces
 # and publishes sensor_msgs/Imu to /imu_sensor_broadcaster/imu at 100 Hz.
@@ -98,3 +102,9 @@ magnetometer_broadcaster:
     #static_covariance: [2.5e-10, 0.0,     0.0,
     #                    0.0,     2.5e-10, 0.0,
     #                    0.0,     0.0,     2.5e-10]
+
+# State Interfaces Broadcaster configuration
+# Publishes the state interfaces mentioned in the ros-parameters below
+state_interfaces_broadcaster:
+  ros__parameters:
+    interfaces: ["bno08x/orientation.status", "bno08x/angular_velocity.status", "bno08x/linear_acceleration.status", "bno08x/magnetic_field.status"]

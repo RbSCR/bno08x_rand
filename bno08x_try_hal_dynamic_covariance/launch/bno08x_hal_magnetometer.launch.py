@@ -5,6 +5,7 @@ Launch file for the BNO08x IMU hardware interface.
 Starts the complete ros2_control stack for the BNO08x IMU, including:
 - Robot state publisher for TF transforms
 - Controller manager with the BNO08x SensorInterface hardware plugin
+- State interfaces broadcaster
 - IMU sensor broadcaster publishing sensor_msgs/Imu to /imu_sensor_broadcaster/imu
 - Magnetometer broadcaster publishing sensor_msgs/MagneticField to /magnetometer_broadcaster/magnetic_field
 
@@ -158,6 +159,13 @@ def generate_launch_description():
         parameters=[robot_description, controller_config],
     )
 
+    # state interface broadcaster spawner
+    state_interfaces_spawner = Node(
+        package='controller_manager',
+        executable='spawner',
+        arguments=['state_interfaces_broadcaster', '--controller-manager', '/controller_manager'],
+    )
+
     # IMU sensor broadcaster spawner
     imu_broadcaster_spawner = Node(
         package='controller_manager',
@@ -187,6 +195,7 @@ def generate_launch_description():
         declared_arguments + [
             robot_state_publisher_node,
             controller_manager_node,
+            state_interfaces_spawner,
             imu_broadcaster_spawner,
             magnetometer_broadcaster_spawner,
             imu_hal_tf_broadcaster_node,
