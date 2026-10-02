@@ -7,7 +7,8 @@ on:
     branches: [ main ]
 
 env:
-  MY_PACKAGES: bno08x_try_sensor_status bno08x_try_hal_dynamic_covariance
+  MY_PACKAGES: bno08x_try_hal_dynamic_covariance
+  # research of 'bno08x_try_sensor_status' has finished, no need to build anymore
 
 jobs:
   build-and-test:
