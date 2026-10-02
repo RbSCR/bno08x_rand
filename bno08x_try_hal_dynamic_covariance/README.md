@@ -7,39 +7,44 @@
 
 - [bno08x\_try\_hal\_dynamic\_covariance](#bno08x_try_hal_dynamic_covariance)
   - [Package bno08x try hal dynamic covariance](#package-bno08x-try-hal-dynamic-covariance)
-  - [Features](#features)
-  - [Hardware parameters and state interfaces](#hardware-parameters-and-state-interfaces)
-    - [Hardware parameters](#hardware-parameters)
-    - [State interfaces](#state-interfaces)
-  - [Launch files and parameters](#launch-files-and-parameters)
-    - [Launch files](#launch-files)
-      - [bno08x](#bno08x)
-      - [bno08x\_magnetometer](#bno08x_magnetometer)
-      - [bno08x\_fixedhwparams](#bno08x_fixedhwparams)
-    - [Launch parameters](#launch-parameters)
+  - [(Intended) package functionality](#intended-package-functionality)
+    - [Features](#features)
+    - [Hardware parameters and state interfaces](#hardware-parameters-and-state-interfaces)
+      - [Hardware parameters](#hardware-parameters)
+      - [State interfaces](#state-interfaces)
+    - [Launch files and parameters](#launch-files-and-parameters)
+      - [Launch files](#launch-files)
+        - [bno08x](#bno08x)
+        - [bno08x\_magnetometer](#bno08x_magnetometer)
+        - [bno08x\_fixedhwparams](#bno08x_fixedhwparams)
+      - [Launch parameters](#launch-parameters)
+  - [Research intention](#research-intention)
   - [Research status / progress](#research-status--progress)
   - [Related research packages](#related-research-packages)
 
 ## Package bno08x try hal dynamic covariance
 
 Researching the use of the `status` field from the measurement reports in the ROS2 Control chain to have IMU messages with a dynamic covariance.
+Also see [intension](#research-intention).
 
 This package is copied from the `BNO08x_hardware_interface` and updated for the research goal.
 Several filenames have been changed to distinguish them from the original (in case the original package and this packaege will be tested on the same device).
 
+## (Intended) package functionality
+
 New researched parts are documented here, see the original package `BNO08x_hardware_interface` for other information.
 
-## Features
+### Features
 
 No new or changed features yet.
 
-## Hardware parameters and state interfaces
+### Hardware parameters and state interfaces
 
-### Hardware parameters
+#### Hardware parameters
 
 See original package.
 
-### State interfaces
+#### State interfaces
 
 | Interface | Unit | Notes |
 | --------- | ---- | ----- |
@@ -63,9 +68,9 @@ See original package.
 
 New state interfaces marked **bold**.
 
-## Launch files and parameters
+### Launch files and parameters
 
-### Launch files
+#### Launch files
 
 This package has 3 (example) launch-files:
 
@@ -73,7 +78,7 @@ This package has 3 (example) launch-files:
 - `bno08x_hal_magnetometer.launch.py`
 - `bno08x_hal_fixedhwparams.launch.py`
 
-#### bno08x
+##### bno08x
 
 This file default launches the BNO08x with only the IMU enabled.
 The related urdf-file is `bno08x_hal.urdf.xacro` and the related controller-config-file
@@ -83,7 +88,7 @@ The urdf- and config-file are not configured for the magnetometer.
 The urdf-file contains defaults for the hardware parameters, which can be overruled by the
 parameters in the launch-file.
 
-#### bno08x_magnetometer
+##### bno08x_magnetometer
 
 This file default launches the BNO08x with the IMU and the magnetometer enabled.
 The related urdf-file is `bno08x_hal_agnetometer.urdf.xacro` and the related controller-config-file
@@ -93,7 +98,7 @@ The urdf- and config-file are configured for the magnetometer.
 The urdf-file contains defaults for the hardware parameters, which can be overruled by the
 parameters in the launch-file.
 
-#### bno08x_fixedhwparams
+##### bno08x_fixedhwparams
 
 This file default launches the BNO08x with only the IMU enabled.
 The related urdf-file is `bno08x_hal_fixedhwparams.urdf.xacro` and the related controller-config-file
@@ -110,7 +115,7 @@ Note: because this launch-file and urdf-file are also used in a test, the hardwa
 parameter `enable_moch_mode` does not have a 'fixed' value in the urdf-file, but is still used as
 a parameter from the launch-file.
 
-### Launch parameters
+#### Launch parameters
 
 The launch parameters enable additional publishers/broadcasters.
 
@@ -123,9 +128,30 @@ The IMU measurements (orientation, angular velocity and linear acceleration) are
 
 The hardware parameters (see the hardware parameter table in original package) can also be used/set in the launch files `bno08x.launch.py` and `bno08x_magnetometer.launch.py` to overrule the defaults set in the related `urdf.xacro`-file.
 
+## Research intention
+
+- Add `status` to the state interface
+- Create a new `imu_sensor_dynamic_covariance_broadcaster` (based upon the ROS2 Control imu_sensor_broadcaster) that will update the covariance-matrix with values depending on the `status`
+
 ## Research status / progress
 
-- created package~~, no research enhancements yet, same functionality as original package~~
-- added status field (.cpp/.hpp , urdf.xacro's , cpp-test)
+- created package ~~, no research enhancements yet, same functionality as original package~~
+- added
+  - status field (.cpp/.hpp , urdf.xacro's , cpp-test)
+  - (ROS2 Control) state_interfaces_broadcaster
+- result physical test (Jazzy Ubuntu 24.04):
+  - status field is published in state interface
+  - (ROS2 Control) imu_sensor_broadcaster and magnetometer_broadcaster still publish respective sensor messages
+- possible change:
+  - put standard deviation instead of status/accuracy in the state interface
+  - advantages:
+    - new imu_sensor_dynamic_covariance_broadcaster doesn't need to 'know' about the meaning of the status/accuracy values
+    - new broadcaster will be more generic and not specific to the BNO08x sensor
+    - values of the standard deviation are controlled/determined by the hardware interface (i.e. close to measurement source)
+  - reason for 1 value standard deviation
+    - keep state interface small
+      - covariance-matrix-diagonal (or standard-deviation-matrix-diagonal) will add 2 addition values to the interface per sensor
+    - standard deviation is often mentioned in datasheets
+    - covariance-matrix often has the same value on the matrix-diagonal
 
 ## Related research packages
