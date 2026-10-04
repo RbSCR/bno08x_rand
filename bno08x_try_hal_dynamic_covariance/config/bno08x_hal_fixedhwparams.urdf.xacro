@@ -34,17 +34,17 @@
       <plugin>bno08x_try_hal_dynamic_covariance/BNO08XTryHalDynamicCovariance</plugin>
 
       <!-- I2C Parameters -->
-      <param name="i2c_bus">1</param>     <!-- I2C bus -->
-      <param name="i2c_addr">4A</param>   <!-- I2C address in hex, no 0x prefix (4A = 0x4A) -->
+      <param name="i2c_bus">1</param>      <!-- I2C bus -->
+      <param name="i2c_addr">4A</param>    <!-- I2C address in hex, no 0x prefix (4A = 0x4A) -->
 
       <!-- Sensor Configuration -->
-      <param name="axis_remap">East-North-Up</param>    <!-- Axis placement config -->
-      <param name="imu_rate">100</param>                <!-- IMU rate (Hz)-->
-      <param name="enable_magnetometer">false</param>   <!-- enable/disable magnetometer -->
+      <param name="axis_remap">East-North-Up</param>      <!-- Axis placement config -->
+      <param name="imu_rate">100</param>                  <!-- IMU rate (Hz)-->
+      <param name="enable_magnetometer">false</param>     <!-- enable/disable magnetometer -->
       <!-- Note: this urdf is intended for a non-magnetometer setup -->
       <!-- magnetometer related lines are not present. -->
 
-      <param name="enable_mock_mode">$(arg enable_mock_mode)</param>   <!-- Simulation mode, no hardware required (default: false) -->
+      <param name="enable_mock_mode">$(arg enable_mock_mode)</param>      <!-- Simulation mode, no hardware required (default: false) -->
     </hardware>
 
     <sensor name="bno08x">
@@ -53,19 +53,27 @@
       <state_interface name="orientation.y"/>
       <state_interface name="orientation.z"/>
       <state_interface name="orientation.w"/>
-      <state_interface name="orientation.status"/>
 
       <!-- Angular velocity (rad/s) -->
       <state_interface name="angular_velocity.x"/>
       <state_interface name="angular_velocity.y"/>
       <state_interface name="angular_velocity.z"/>
-      <state_interface name="angular_velocity.status"/>
 
       <!-- Linear acceleration (m/s²), gravity-compensated -->
       <state_interface name="linear_acceleration.x"/>
       <state_interface name="linear_acceleration.y"/>
       <state_interface name="linear_acceleration.z"/>
-      <state_interface name="linear_acceleration.status"/>
+
+      <!-- Covarience (matrix diagonals)-->
+      <state_interface name="orientation_covariance_xx"/>
+      <state_interface name="orientation_covariance_yy"/>
+      <state_interface name="orientation_covariance_zz"/>
+      <state_interface name="angular_velocity_covariance_xx"/>
+      <state_interface name="angular_velocity_covariance_yy"/>
+      <state_interface name="angular_velocity_covariance_zz"/>
+      <state_interface name="linear_acceleration_covariance_xx"/>
+      <state_interface name="linear_acceleration_covariance_yy"/>
+      <state_interface name="linear_acceleration_covariance_zz"/>
     </sensor>
   </ros2_control>
 

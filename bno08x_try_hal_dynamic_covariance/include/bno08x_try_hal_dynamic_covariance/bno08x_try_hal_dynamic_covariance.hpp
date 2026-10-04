@@ -271,28 +271,48 @@ private:
   Watchdog * watchdog_;
 
   // State storage for imu_sensor - always --
-  // 13 total :10 'standard' (x/y/z/w) and 3 additional status interfaces
+  // 19 total :10 'standard' (x/y/z/w) and 9 additional covariance interfaces
   double hw_orientation_x_{0.0};
   double hw_orientation_y_{0.0};
   double hw_orientation_z_{0.0};
   double hw_orientation_w_{1.0};
-  double hw_orientation_status_{0.0};
+
   double hw_angular_velocity_x_{0.0};
   double hw_angular_velocity_y_{0.0};
   double hw_angular_velocity_z_{0.0};
-  double hw_angular_velocity_status_{0.0};
+
   double hw_linear_acceleration_x_{0.0};
   double hw_linear_acceleration_y_{0.0};
   double hw_linear_acceleration_z_{0.0};
-  double hw_linear_acceleration_status_{0.0};
+
+  double hw_orientation_covariance_xx_{0.0};
+  double hw_orientation_covariance_yy_{0.0};
+  double hw_orientation_covariance_zz_{0.0};
+
+  double hw_angular_velocity_covariance_xx_{0.0};
+  double hw_angular_velocity_covariance_yy_{0.0};
+  double hw_angular_velocity_covariance_zz_{0.0};
+
+  double hw_linear_acceleration_covariance_xx_{0.0};
+  double hw_linear_acceleration_covariance_yy_{0.0};
+  double hw_linear_acceleration_covariance_zz_{0.0};
   // State storage for magnetometer - optional --
-  // 4 total : 3 'standard' (x/y/z) and 1 additional status interface
+  // 6 total : 3 'standard' (x/y/z) and 3 additional covariance interfaces
   double hw_magnetic_field_x_{0.0};
   double hw_magnetic_field_y_{0.0};
   double hw_magnetic_field_z_{0.0};
-  double hw_magnetic_field_status_{0.0};
+  double hw_magnetic_field_covariance_xx_{0.0};
+  double hw_magnetic_field_covariance_yy_{0.0};
+  double hw_magnetic_field_covariance_zz_{0.0};
 
   const double microtesla_to_tesla_{1e-6};
+
+  // TODO(rbscr)  replace dummy covariance values with values from new parameters
+  // dummy covariance values, ridiculous values for testing
+  std::array<double, 4> orientation_covariance_{{90.0, 10.0, 20.0, 30.0}};
+  std::array<double, 4> angular_velocity_covariance_{{91.0, 11.0, 21.0, 31.0}};
+  std::array<double, 4> linear_acceleration_covariance_{{92.0, 12.0, 22.0, 32.0}};
+  std::array<double, 4> magnetic_field_covariance_{{93.0, 13.0, 23.0, 33.0}};
 };
 
 }  // namespace bno08x_try_hal_dynamic_covariance

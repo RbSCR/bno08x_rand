@@ -107,4 +107,7 @@ magnetometer_broadcaster:
 # Publishes the state interfaces mentioned in the ros-parameters below
 state_interfaces_broadcaster:
   ros__parameters:
-    interfaces: ["bno08x/orientation.status", "bno08x/angular_velocity.status", "bno08x/linear_acceleration.status", "bno08x/magnetic_field.status"]
+    interfaces: ["bno08x/orientation_covariance_xx",
+                 "bno08x/angular_velocity_covariance_xx",
+                 "bno08x/linear_acceleration_covariance_xx",
+                 "bno08x/magnetic_field_covariance_xx"]

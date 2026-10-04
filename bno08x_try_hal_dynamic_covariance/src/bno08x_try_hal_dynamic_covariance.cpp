@@ -189,30 +189,42 @@ hardware_interface::CallbackReturn BNO08XTryHalDynamicCovariance::on_init(
     return hardware_interface::CallbackReturn::ERROR;
   }
 
-  // Validate that each declared state interface name matches one of the 13 or 17 expected.
+  // Validate that each declared state interface name matches one of the 19 or 25 expected.
   std::vector<std::string> kExpected = {
     "orientation.x",
     "orientation.y",
     "orientation.z",
     "orientation.w",
-    "orientation.status",
     "angular_velocity.x",
     "angular_velocity.y",
     "angular_velocity.z",
-    "angular_velocity.status",
     "linear_acceleration.x",
     "linear_acceleration.y",
     "linear_acceleration.z",
-    "linear_acceleration.status"};
+    "orientation_covariance_xx",
+    "orientation_covariance_yy",
+    "orientation_covariance_zz",
+    "angular_velocity_covariance_xx",
+    "angular_velocity_covariance_yy",
+    "angular_velocity_covariance_zz",
+    "linear_acceleration_covariance_xx",
+    "linear_acceleration_covariance_yy",
+    "linear_acceleration_covariance_zz"};
   std::string expected_txt =
-    "orientation.{x,y,z,w,status}, angular_velocity.{x,y,z,status}, "
-    "linear_acceleration.{x,y,z,status}";
+    "orientation.{x,y,z,w}, angular_velocity.{x,y,z}, linear_acceleration.{x,y,z}, "
+    "orientation_covariance_{xx,yy,zz}, angular_velocity_covariance_{xx,yy,zz}, "
+    "linear_acceleration_covariance_{xx,yy,zz}";
 
   if (enable_magnetometer_) {
     std::vector<std::string> magnetic_states = {
-      "magnetic_field.x", "magnetic_field.y", "magnetic_field.z", "magnetic_field.status"};
+      "magnetic_field.x",
+      "magnetic_field.y",
+      "magnetic_field.z",
+      "magnetic_field_covariance_xx",
+      "magnetic_field_covariance_yy",
+      "magnetic_field_covariance_zz"};
     kExpected.insert(kExpected.end(), magnetic_states.begin(), magnetic_states.end());
-    expected_txt.append(", magnetic_field.{x,y,z,status}");
+    expected_txt.append(", magnetic_field.{x,y,z}, magnetic_field_covariance_{xx,yy,zz}");
   }
 
   for (const auto & si : info_.sensors[0].state_interfaces) {
@@ -251,7 +263,10 @@ hardware_interface::CallbackReturn BNO08XTryHalDynamicCovariance::on_configure(
     hw_orientation_x_ = 0.0;
     hw_orientation_y_ = 0.0;
     hw_orientation_z_ = 0.0;
-    hw_orientation_status_ = 0.0;
+    hw_orientation_covariance_xx_ = 0.0;  // TODO(rbscr) replace 0.0 with a "good" covariance value
+    hw_orientation_covariance_yy_ = 0.0;
+    hw_orientation_covariance_zz_ = 0.0;
+
     // Angular velocity and linear acceleration stay at 0.0 (correct for a stationary mock).
     return hardware_interface::CallbackReturn::SUCCESS;
   }
@@ -348,7 +363,7 @@ void BNO08XTryHalDynamicCovariance::init_communication() {
   }
 }
 
-// ENHANCEMENT(rbscr) other functionalities f.e. device info, status, diagnostics
+// ENHANCEMENT(rbscr) other functionalities f.e. device info, device status, diagnostics
 void BNO08XTryHalDynamicCovariance::init_sensor() {
   try {
     bno08x_ = new BNO08x(
@@ -429,7 +444,9 @@ void BNO08XTryHalDynamicCovariance::sensor_callback(
         hw_magnetic_field_x_ = sensor_value->un.magneticField.x * microtesla_to_tesla_;
         hw_magnetic_field_y_ = sensor_value->un.magneticField.y * microtesla_to_tesla_;
         hw_magnetic_field_z_ = sensor_value->un.magneticField.z * microtesla_to_tesla_;
-        hw_magnetic_field_status_ = static_cast<double>(sensor_value->status);
+        hw_magnetic_field_covariance_xx_ = magnetic_field_covariance_[sensor_value->status];
+        hw_magnetic_field_covariance_yy_ = magnetic_field_covariance_[sensor_value->status];
+        hw_magnetic_field_covariance_zz_ = magnetic_field_covariance_[sensor_value->status];
       }
       break;
     case SH2_ROTATION_VECTOR:
@@ -437,19 +454,25 @@ void BNO08XTryHalDynamicCovariance::sensor_callback(
       hw_orientation_y_ = sensor_value->un.rotationVector.j;
       hw_orientation_z_ = sensor_value->un.rotationVector.k;
       hw_orientation_w_ = sensor_value->un.rotationVector.real;
-      hw_orientation_status_ = static_cast<double>(sensor_value->status);
+      hw_orientation_covariance_xx_ = orientation_covariance_[sensor_value->status];
+      hw_orientation_covariance_yy_ = orientation_covariance_[sensor_value->status];
+      hw_orientation_covariance_zz_ = orientation_covariance_[sensor_value->status];
       break;
     case SH2_ACCELEROMETER:
       hw_linear_acceleration_x_ = sensor_value->un.accelerometer.x;
       hw_linear_acceleration_y_ = sensor_value->un.accelerometer.y;
       hw_linear_acceleration_z_ = sensor_value->un.accelerometer.z;
-      hw_linear_acceleration_status_ = static_cast<double>(sensor_value->status);
+      hw_linear_acceleration_covariance_xx_ = linear_acceleration_covariance_[sensor_value->status];
+      hw_linear_acceleration_covariance_yy_ = linear_acceleration_covariance_[sensor_value->status];
+      hw_linear_acceleration_covariance_zz_ = linear_acceleration_covariance_[sensor_value->status];
       break;
     case SH2_GYROSCOPE_CALIBRATED:
       hw_angular_velocity_x_ = sensor_value->un.gyroscope.x;
       hw_angular_velocity_y_ = sensor_value->un.gyroscope.y;
       hw_angular_velocity_z_ = sensor_value->un.gyroscope.z;
-      hw_angular_velocity_status_ = static_cast<double>(sensor_value->status);
+      hw_angular_velocity_covariance_xx_ = angular_velocity_covariance_[sensor_value->status];
+      hw_angular_velocity_covariance_yy_ = angular_velocity_covariance_[sensor_value->status];
+      hw_angular_velocity_covariance_zz_ = angular_velocity_covariance_[sensor_value->status];
       break;
     default:
       break;
@@ -482,21 +505,29 @@ void BNO08XTryHalDynamicCovariance::close_hardware() {
   hw_orientation_y_ = 0.0;
   hw_orientation_z_ = 0.0;
   hw_orientation_w_ = 1.0;
-  hw_orientation_status_ = 0.0;
   hw_angular_velocity_x_ = 0.0;
   hw_angular_velocity_y_ = 0.0;
   hw_angular_velocity_z_ = 0.0;
-  hw_angular_velocity_status_ = 0.0;
   hw_linear_acceleration_x_ = 0.0;
   hw_linear_acceleration_y_ = 0.0;
   hw_linear_acceleration_z_ = 0.0;
-  hw_linear_acceleration_status_ = 0.0;
+  hw_orientation_covariance_xx_ = 0.0;
+  hw_orientation_covariance_yy_ = 0.0;
+  hw_orientation_covariance_zz_ = 0.0;
+  hw_angular_velocity_covariance_xx_ = 0.0;
+  hw_angular_velocity_covariance_yy_ = 0.0;
+  hw_angular_velocity_covariance_zz_ = 0.0;
+  hw_linear_acceleration_covariance_xx_ = 0.0;
+  hw_linear_acceleration_covariance_yy_ = 0.0;
+  hw_linear_acceleration_covariance_zz_ = 0.0;
 
   if (enable_magnetometer_) {
     hw_magnetic_field_x_ = 0.0;
     hw_magnetic_field_y_ = 0.0;
     hw_magnetic_field_z_ = 0.0;
-    hw_magnetic_field_status_ = 0.0;
+    hw_magnetic_field_covariance_xx_ = 0.0;
+    hw_magnetic_field_covariance_yy_ = 0.0;
+    hw_magnetic_field_covariance_zz_ = 0.0;
   }
 }
 
@@ -511,25 +542,48 @@ BNO08XTryHalDynamicCovariance::export_state_interfaces() {
   state_interfaces.emplace_back(sensor_name, "orientation.y", &hw_orientation_y_);
   state_interfaces.emplace_back(sensor_name, "orientation.z", &hw_orientation_z_);
   state_interfaces.emplace_back(sensor_name, "orientation.w", &hw_orientation_w_);
-  state_interfaces.emplace_back(sensor_name, "orientation.status", &hw_orientation_status_);
+
   state_interfaces.emplace_back(sensor_name, "angular_velocity.x", &hw_angular_velocity_x_);
   state_interfaces.emplace_back(sensor_name, "angular_velocity.y", &hw_angular_velocity_y_);
   state_interfaces.emplace_back(sensor_name, "angular_velocity.z", &hw_angular_velocity_z_);
-  state_interfaces.emplace_back(
-    sensor_name, "angular_velocity.status", &hw_angular_velocity_status_);
+
   state_interfaces.emplace_back(sensor_name, "linear_acceleration.x", &hw_linear_acceleration_x_);
   state_interfaces.emplace_back(sensor_name, "linear_acceleration.y", &hw_linear_acceleration_y_);
   state_interfaces.emplace_back(sensor_name, "linear_acceleration.z", &hw_linear_acceleration_z_);
+
   state_interfaces.emplace_back(
-    sensor_name, "linear_acceleration.status", &hw_linear_acceleration_status_);
+    sensor_name, "orientation_covariance_xx", &hw_orientation_covariance_xx_);
+  state_interfaces.emplace_back(
+    sensor_name, "orientation_covariance_yy", &hw_orientation_covariance_yy_);
+  state_interfaces.emplace_back(
+    sensor_name, "orientation_covariance_zz", &hw_orientation_covariance_zz_);
+
+  state_interfaces.emplace_back(
+    sensor_name, "angular_velocity_covariance_xx", &hw_angular_velocity_covariance_xx_);
+  state_interfaces.emplace_back(
+    sensor_name, "angular_velocity_covariance_yy", &hw_angular_velocity_covariance_yy_);
+  state_interfaces.emplace_back(
+    sensor_name, "angular_velocity_covariance_zz", &hw_angular_velocity_covariance_zz_);
+
+  state_interfaces.emplace_back(
+    sensor_name, "linear_acceleration_covariance_xx", &hw_linear_acceleration_covariance_xx_);
+  state_interfaces.emplace_back(
+    sensor_name, "linear_acceleration_covariance_yy", &hw_linear_acceleration_covariance_yy_);
+  state_interfaces.emplace_back(
+    sensor_name, "linear_acceleration_covariance_zz", &hw_linear_acceleration_covariance_zz_);
 
   int state_count{13};
   if (enable_magnetometer_) {
     state_interfaces.emplace_back(sensor_name, "magnetic_field.x", &hw_magnetic_field_x_);
     state_interfaces.emplace_back(sensor_name, "magnetic_field.y", &hw_magnetic_field_y_);
     state_interfaces.emplace_back(sensor_name, "magnetic_field.z", &hw_magnetic_field_z_);
-    state_interfaces.emplace_back(sensor_name, "magnetic_field.status", &hw_magnetic_field_status_);
-    state_count += 4;
+    state_interfaces.emplace_back(
+      sensor_name, "magnetic_field_covariance_xx", &hw_magnetic_field_covariance_xx_);
+    state_interfaces.emplace_back(
+      sensor_name, "magnetic_field_covariance_yy", &hw_magnetic_field_covariance_yy_);
+    state_interfaces.emplace_back(
+      sensor_name, "magnetic_field_covariance_zz", &hw_magnetic_field_covariance_zz_);
+    state_count += 6;
   }
 
   return state_interfaces;

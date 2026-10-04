@@ -20,6 +20,7 @@
       - [Launch parameters](#launch-parameters)
   - [Research intention](#research-intention)
   - [Research status / progress](#research-status--progress)
+    - [Todo](#todo)
   - [Related research packages](#related-research-packages)
 
 ## Package bno08x try hal dynamic covariance
@@ -52,21 +53,29 @@ See original package.
 | `orientation.y` | – | Quaternion Y |
 | `orientation.z` | – | Quaternion Z |
 | `orientation.w` | – | Quaternion W |
-| **`orientation.status`** | – | **Status** |
 | `angular_velocity.x` | rad/s | Gyroscope X |
 | `angular_velocity.y` | rad/s | Gyroscope Y |
 | `angular_velocity.z` | rad/s | Gyroscope Z |
-| **`angular_velocity.status`** | - | **Gyroscope status** |
 | `linear_acceleration.x` | m/s² | Accelerometer X |
 | `linear_acceleration.y` | m/s² | Accelerometer Y |
 | `linear_acceleration.z` | m/s² | Accelerometer Z |
-| **`linear_acceleration.status`** | - | **Accelerometer status** |
+| **`orientation_covariance_xx`** | – | **Orientation X covariance** |
+| **`orientation_covariance_yy`** | – | **Orientation Y covariance** |
+| **`orientation_covariance_zz`** | – | **Orientation Z covariance** |
+| **`angular_velocity_covariance_xx`** | - | **Gyroscope X covariance** |
+| **`angular_velocity_covariance_yy`** | - | **Gyroscope Y covariance** |
+| **`angular_velocity_covariance_zz`** | - | **Gyroscope Z covariance** |
+| **`linear_acceleration_covariance_xx`** | - | **Accelerometer X covariance** |
+| **`linear_acceleration_covariance_yy`** | - | **Accelerometer Y covariance** |
+| **`linear_acceleration_covariance_zz`** | - | **Accelerometer Z covariance** |
 | `magnetic_field.x` | Tesla | Magnetometer X - when magnetometer enabled |
 | `magnetic_field.y` | Tesla | Magnetometer Y - when magnetometer enabled |
 | `magnetic_field.z` | Tesla | Magnetometer Z - when magnetometer enabled |
-| **`magnetic_field.status`** | - | **Magnetometer status** - when magnetometer enabled |
+| **`magnetic_field_covariance_xx`** | - | **Magnetometer X covariance** - when magnetometer enabled |
+| **`magnetic_field_covariance_yy`** | - | **Magnetometer Y covariance** - when magnetometer enabled |
+| **`magnetic_field_covariance_zz`** | - | **Magnetometer Z covariance** - when magnetometer enabled |
 
-New state interfaces marked **bold**.
+New state interfaces marked in **bold**.
 
 ### Launch files and parameters
 
@@ -130,8 +139,8 @@ The hardware parameters (see the hardware parameter table in original package) c
 
 ## Research intention
 
-- Add `status` to the state interface
-- Create a new `imu_sensor_dynamic_covariance_broadcaster` (based upon the ROS2 Control imu_sensor_broadcaster) that will update the covariance-matrix with values depending on the `status`
+- Add ~~`status`~~ `covariance` to the state interface
+- Create a new `imu_sensor_dynamic_covariance_broadcaster` (based upon the ROS2 Control imu_sensor_broadcaster) that will update the covariance-matrix in the IMU message with values depending on the ~~`status`~~ `covariance` in the state interface.
 
 ## Research status / progress
 
@@ -153,5 +162,17 @@ The hardware parameters (see the hardware parameter table in original package) c
       - covariance-matrix-diagonal (or standard-deviation-matrix-diagonal) will add 2 addition values to the interface per sensor
     - standard deviation is often mentioned in datasheets
     - covariance-matrix often has the same value on the matrix-diagonal
+- replaced status fields with covariance fields in the state interface, these contain dummy values for now
+- decided to use covariance (for each sensor the three matrix diagonals) instead of stdev fields in state interface because
+  - covariance can be calculated/determined from the standard deviation from the datasheet or could be determind using calibration package [which will be another research project]
+  - the ROS2 Control `gps_sensor_broadcaster` has a mechanism use the covariance from either the configuration or from the state interface,
+    something simular could be done for the new `imu_sensor_dynamic_covariance_broadcaster`
+  - internet searching about the performance impact of multiple new fields in the state interface mentioned that it should have negligible impact
+
+### Todo
+
+- add parameters for covariance values for the matrix of the sensors/reports (orientation, angular velocity, linear acceleration, magnetometer) and status/accuracy (unreliable, low, medium, high)
+  - possible implementation: use a array parameter for each of the sensors, array contains values for the 4 accuracy values
+    - i.e:  orientatation_covariance [unreliable-value, low-value, medium-value, high-value]
 
 ## Related research packages
