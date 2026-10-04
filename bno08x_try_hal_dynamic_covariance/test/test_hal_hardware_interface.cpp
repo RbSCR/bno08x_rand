@@ -201,7 +201,7 @@ TEST(ExportStateInterfacesTest, InterfacesCorrect) {
   ASSERT_EQ(hw.on_init(make_valid_imu_info()), CallbackReturn::SUCCESS);
   auto ifaces = hw.export_state_interfaces();
 
-  ASSERT_EQ(ifaces.size(), 13u);
+  ASSERT_EQ(ifaces.size(), 19u);
 
   std::vector<std::string> names;
   for (const auto & iface : ifaces) {
@@ -209,10 +209,13 @@ TEST(ExportStateInterfacesTest, InterfacesCorrect) {
     names.push_back(iface.get_interface_name());
   }
   for (const auto & expected :
-       {"orientation.x", "orientation.y", "orientation.z", "orientation.w", "orientation.status",
-        "angular_velocity.x", "angular_velocity.y", "angular_velocity.z", "angular_velocity.status",
-        "linear_acceleration.x", "linear_acceleration.y", "linear_acceleration.z",
-        "linear_acceleration.status"}) {
+       {"orientation.x", "orientation.y", "orientation.z", "orientation.w", "angular_velocity.x",
+        "angular_velocity.y", "angular_velocity.z", "linear_acceleration.x",
+        "linear_acceleration.y", "linear_acceleration.z", "orientation_covariance_xx",
+        "orientation_covariance_yy", "orientation_covariance_zz", "angular_velocity_covariance_xx",
+        "angular_velocity_covariance_yy", "angular_velocity_covariance_zz",
+        "linear_acceleration_covariance_xx", "linear_acceleration_covariance_yy",
+        "linear_acceleration_covariance_zz"}) {
     EXPECT_NE(std::find(names.begin(), names.end(), expected), names.end())
       << "Missing: " << expected;
   }
@@ -295,7 +298,9 @@ TEST_F(MockHwTest, ReadOutputsValid) {
   EXPECT_DOUBLE_EQ(get("orientation.x"), 0.0);
   EXPECT_DOUBLE_EQ(get("orientation.y"), 0.0);
   EXPECT_DOUBLE_EQ(get("orientation.z"), 0.0);
-  EXPECT_DOUBLE_EQ(get("orientation.status"), 0.0);
+  EXPECT_DOUBLE_EQ(get("orientation_covariance_xx"), 0.0);
+  EXPECT_DOUBLE_EQ(get("orientation_covariance_yy"), 0.0);
+  EXPECT_DOUBLE_EQ(get("orientation_covariance_zz"), 0.0);
   for (auto & iface : ifaces_) {
     double v = std::numeric_limits<double>::quiet_NaN();
     EXPECT_TRUE(iface.get_value(v, true));
@@ -331,15 +336,21 @@ TEST_F(MockHwTest, StateResetAfterCleanup) {
   EXPECT_DOUBLE_EQ(get("orientation.x"), 0.0);
   EXPECT_DOUBLE_EQ(get("orientation.y"), 0.0);
   EXPECT_DOUBLE_EQ(get("orientation.z"), 0.0);
-  EXPECT_DOUBLE_EQ(get("orientation.status"), 0.0);
   EXPECT_DOUBLE_EQ(get("angular_velocity.x"), 0.0);
   EXPECT_DOUBLE_EQ(get("angular_velocity.y"), 0.0);
   EXPECT_DOUBLE_EQ(get("angular_velocity.z"), 0.0);
-  EXPECT_DOUBLE_EQ(get("angular_velocity.status"), 0.0);
   EXPECT_DOUBLE_EQ(get("linear_acceleration.x"), 0.0);
   EXPECT_DOUBLE_EQ(get("linear_acceleration.y"), 0.0);
   EXPECT_DOUBLE_EQ(get("linear_acceleration.z"), 0.0);
-  EXPECT_DOUBLE_EQ(get("linear_acceleration.status"), 0.0);
+  EXPECT_DOUBLE_EQ(get("orientation_covariance_xx"), 0.0);
+  EXPECT_DOUBLE_EQ(get("orientation_covariance_yy"), 0.0);
+  EXPECT_DOUBLE_EQ(get("orientation_covariance_zz"), 0.0);
+  EXPECT_DOUBLE_EQ(get("angular_velocity_covariance_xx"), 0.0);
+  EXPECT_DOUBLE_EQ(get("angular_velocity_covariance_yy"), 0.0);
+  EXPECT_DOUBLE_EQ(get("angular_velocity_covariance_zz"), 0.0);
+  EXPECT_DOUBLE_EQ(get("linear_acceleration_covariance_xx"), 0.0);
+  EXPECT_DOUBLE_EQ(get("linear_acceleration_covariance_yy"), 0.0);
+  EXPECT_DOUBLE_EQ(get("linear_acceleration_covariance_zz"), 0.0);
 }
 
 TEST_F(MockHwTest, ShutdownFromInactive) {
@@ -366,6 +377,8 @@ TEST_F(MockHwTest, OnErrorCleansUpAndAllowsRecovery) {
   // State must be reset to initial values (close_hardware called by on_error)
   EXPECT_DOUBLE_EQ(get("orientation.w"), 1.0);
   EXPECT_DOUBLE_EQ(get("orientation.x"), 0.0);
+  EXPECT_DOUBLE_EQ(get("orientation.y"), 0.0);
+  EXPECT_DOUBLE_EQ(get("orientation.z"), 0.0);
   EXPECT_DOUBLE_EQ(get("angular_velocity.x"), 0.0);
   EXPECT_DOUBLE_EQ(get("linear_acceleration.x"), 0.0);
 
