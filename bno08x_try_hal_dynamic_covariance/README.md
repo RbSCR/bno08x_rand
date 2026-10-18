@@ -3,7 +3,7 @@
 ![Project Status](https://img.shields.io/badge/Status-Work%20In%20Progress-orange)
 ![ROS 2](https://img.shields.io/badge/ROS%202-Jazzy%20|%20Kilted%20(Ubuntu%2024.04)-blue?style=flat&logo=ros&logoSize=auto)
 ![C++](https://img.shields.io/badge/C++-17-blue?style=flat&logo=cplusplus&logoColor=white)
-![License](https://img.shields.io/github/license/RbSCR/bno08x_hardware_interface?label=License)
+![License](https://img.shields.io/github/license/rbscr/bno08x_rand?label=License)
 
 - [bno08x\_try\_hal\_dynamic\_covariance](#bno08x_try_hal_dynamic_covariance)
   - [Package bno08x try hal dynamic covariance](#package-bno08x-try-hal-dynamic-covariance)
@@ -176,3 +176,5 @@ The hardware parameters (see the hardware parameter table in original package) c
     - i.e:  orientatation_covariance [unreliable-value, low-value, medium-value, high-value]
 
 ## Related research packages
+
+- [imu_sensor_covariance_broadcaster](../imu_sensor_covariance_broadcaster/README.md)

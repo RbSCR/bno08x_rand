@@ -1,0 +1,53 @@
+<?xml version="1.0"?>
+<?xml-model href="http://download.ros.org/schema/package_format3.xsd" schematypens="http://www.w3.org/2001/XMLSchema"?>
+<package format="3">
+  <name>imu_sensor_covariance_static_and_dynamic_broadcaster</name>
+  <version>0.0.0</version>
+  <description>Controller to publish readings of IMU sensors with either static or dynamic covarience's.</description>
+  <license>Apache License 2.0</license>
+
+  <maintainer email="6249544+RbSCR@users.noreply.github.com">RbSCR</maintainer>
+
+  <author email="6249544+RbSCR@users.noreply.github.com">RbSCR</author>
+
+  <!-- Authors of the gps_sensor_broadcaster package that was used as a starting point for this package -->
+  <author email="wiktorbajor1@gmail.com">Wiktor Bajor</author>
+  <author email="delicat.kuba@gmail.com">Jakub Delicat</author>
+
+  <!-- Author of the imu_sensor_broadcaster package that was used as a starting point for this package -->
+  <author email="victor.lopez@pal-robotics.com">Victor Lopez</author>
+
+  <buildtool_depend>ament_cmake</buildtool_depend>
+  <buildtool_depend>ament_cmake_gen_version_h</buildtool_depend>
+
+  <build_depend>ros2_control_cmake</build_depend>
+
+  <depend>controller_interface</depend>
+  <depend>generate_parameter_library</depend>
+  <depend>eigen</depend>
+  <depend>hardware_interface</depend>
+  <depend>pluginlib</depend>
+  <depend>rclcpp</depend>
+  <depend>rclcpp_lifecycle</depend>
+  <depend>realtime_tools</depend>
+  <depend>sensor_msgs</depend>
+
+  # TODO(rbscr) check needed
+  # -- start semantic_component
+  ##<build_depend>fmt</build_depend>
+  ##<build_depend>pal_statistics</build_depend>
+  # -- end semantic_component
+
+  <test_depend>ament_cmake_gmock</test_depend>
+  <test_depend>controller_manager</test_depend>
+  <test_depend>ros2_control_test_assets</test_depend>
+
+  # TODO(rbscr) check needed
+  # -- start semantic_component
+  <test_depend>std_msgs</test_depend>
+  # -- end semantic_component
+
+  <export>
+    <build_type>ament_cmake</build_type>
+  </export>
+</package>

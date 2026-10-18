@@ -1,0 +1,10 @@
+<library path="imu_sensor_covariance_static_and_dynamic_broadcaster">
+  <class name="imu_sensor_covariance_static_and_dynamic_broadcaster/IMUSensorCovarianceBroadcaster"
+         type="imu_sensor_covariance_static_and_dynamic_broadcaster::IMUSensorCovarianceBroadcaster" base_class_type="controller_interface::ControllerInterface">
+  <description>
+	  This controller publishes the readings of an IMU sensor as sensor_msgs/imu message.
+    The covariance's of the readings can either be static (determined by the  configuration)
+    or dynamic (determined by the hardware interface).
+  </description>
+  </class>
+</library>
