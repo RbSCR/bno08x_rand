@@ -98,7 +98,7 @@ public:
   std::array<double, 3> get_linear_acceleration() const {
     update_data_from_interfaces();
     std::array<double, 3> linear_acceleration;
-    std::copy(data_.begin() + 7, data_.end(), linear_acceleration.begin());
+    std::copy(data_.begin() + 7, data_.begin() + 10, linear_acceleration.begin());
 
     return linear_acceleration;
   }

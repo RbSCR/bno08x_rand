@@ -58,9 +58,9 @@ public:
 protected:
   const size_t size_ = 19;
   const std::string sensor_name_ = "test_IMU";
-  std::array<double, 4> orientation_values_ = {{1.1, 2.2, 3.3, 4.4}};
-  std::array<double, 3> angular_velocity_values_ = {{4.4, 5.5, 6.6}};
-  std::array<double, 3> linear_acceleration_values_ = {{4.4, 5.5, 6.6}};
+  std::array<double, 4> orientation_values_ = {{1.1, 1.2, 1.3, 1.4}};
+  std::array<double, 3> angular_velocity_values_ = {{2.1, 2.2, 2.3}};
+  std::array<double, 3> linear_acceleration_values_ = {{3.1, 3.2, 3.3}};
   std::array<double, 9> orientation_covariance_values_{
     {0.11, 0.0, 0.0, 0.0, 0.12, 0.0, 0.0, 0.0, 0.13}};
   std::array<double, 9> angular_velocity_covariance_values_{
