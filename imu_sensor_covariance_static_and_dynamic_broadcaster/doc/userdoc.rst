@@ -8,7 +8,6 @@ Broadcaster of messages from a IMU sensor.
 The published message type is ``sensor_msgs/msg/IMU``.
 
 The controller is a wrapper around ``IMUSensorCovariance`` semantic component (see ``controller_interface`` package).
-TODO  link to location semantic component
 
 Parameters
 ^^^^^^^^^^^

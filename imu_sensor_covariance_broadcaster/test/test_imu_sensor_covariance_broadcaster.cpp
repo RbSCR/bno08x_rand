@@ -320,13 +320,14 @@ TEST_F(IMUSensorCovarianceBroadcasterTest, SensorStatePublishTest_with_rotation_
   EXPECT_NEAR(imu_msg.linear_acceleration.y, sensor_values_[7], 1e-5);
   EXPECT_NEAR(imu_msg.linear_acceleration.z, -sensor_values_[9], 1e-5);
 
-  // TODO(rbscr)  check covariance transform?
-  for (size_t i = 0; i < 9; ++i) {
-    EXPECT_EQ(imu_msg.orientation_covariance[i], 0.0);
-    EXPECT_EQ(imu_msg.angular_velocity_covariance[i], 0.0);
-    EXPECT_EQ(imu_msg.linear_acceleration_covariance[i], 0.0);
-  }
+  EXPECT_THAT(imu_msg.orientation_covariance, ElementsAreArray(orientation_covariance_values_));
+  EXPECT_THAT(
+    imu_msg.angular_velocity_covariance, ElementsAreArray(angular_velocity_covariance_values_));
+  EXPECT_THAT(
+    imu_msg.linear_acceleration_covariance,
+    ElementsAreArray(linear_acceleration_covariance_values_));
 
+  //
   // Check the exported state interfaces
   const auto exported_state_interfaces = imu_broadcaster_->export_state_interfaces();
   ASSERT_EQ(exported_state_interfaces.size(), 10u);
