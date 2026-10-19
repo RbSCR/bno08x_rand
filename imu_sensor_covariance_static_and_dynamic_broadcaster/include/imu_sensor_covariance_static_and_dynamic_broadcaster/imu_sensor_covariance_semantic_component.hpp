@@ -19,7 +19,11 @@
 
 #include <array>
 #include <limits>
+<<<<<<< HEAD
+#include <string>
+=======
 #include <cstring>
+>>>>>>> origin/main
 
 #include "semantic_components/semantic_component_interface.hpp"
 #include "sensor_msgs/msg/imu.hpp"
@@ -211,7 +215,11 @@ public:
   template <
     typename U = void,
     typename = std::enable_if_t<sensor_option == IMUSensorCovarianceOption::WithCovariance, U>>
+<<<<<<< HEAD
+  const std::array<double, 9> & get_orientation_covariance() {
+=======
   const std::array<double, 9> & get_orientation_covariance() const {
+>>>>>>> origin/main
     const auto data_1 = state_interfaces_[10].get().get_optional();
     const auto data_2 = state_interfaces_[11].get().get_optional();
     const auto data_3 = state_interfaces_[12].get().get_optional();
@@ -235,7 +243,11 @@ public:
   template <
     typename U = void,
     typename = std::enable_if_t<sensor_option == IMUSensorCovarianceOption::WithCovariance, U>>
+<<<<<<< HEAD
+  const std::array<double, 9> & get_angular_velocity_covariance() {
+=======
   const std::array<double, 9> & get_angular_velocity_covariance() const {
+>>>>>>> origin/main
     const auto data_1 = state_interfaces_[13].get().get_optional();
     const auto data_2 = state_interfaces_[14].get().get_optional();
     const auto data_3 = state_interfaces_[15].get().get_optional();
@@ -259,7 +271,11 @@ public:
   template <
     typename U = void,
     typename = std::enable_if_t<sensor_option == IMUSensorCovarianceOption::WithCovariance, U>>
+<<<<<<< HEAD
+  const std::array<double, 9> & get_linear_acceleration_covariance() {
+=======
   const std::array<double, 9> & get_linear_acceleration_covariance() const {
+>>>>>>> origin/main
     const auto data_1 = state_interfaces_[16].get().get_optional();
     const auto data_2 = state_interfaces_[17].get().get_optional();
     const auto data_3 = state_interfaces_[18].get().get_optional();
@@ -305,17 +321,29 @@ public:
     //    message.position_covariance = get_covariance();
     // }
 
+<<<<<<< HEAD
+    // TODO(rbscr)
+    if constexpr (sensor_option == IMUSensorCovarianceOption::WithCovariance) {
+      // message.orientation_covariance = get_orientation_covariance();
+      // message.angular_velocity_covariance = get_angular_velocity_covariance();
+      // message.linear_acceleration_covariance = get_linear_acceleration_covariance();
+=======
     if constexpr (sensor_option == IMUSensorCovarianceOption::WithCovariance) {
       message.orientation_covariance = get_orientation_covariance();
       message.angular_velocity_covariance = get_angular_velocity_covariance();
       message.linear_acceleration_covariance = get_linear_acceleration_covariance();
+>>>>>>> origin/main
     }
 
     return true;
   }
 
 private:
+<<<<<<< HEAD
+  std::array<double, 9> covariance_{{0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0}};
+=======
   mutable std::array<double, 9> covariance_{{0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0}};
+>>>>>>> origin/main
 };
 
 }  // namespace my_semantic_component
