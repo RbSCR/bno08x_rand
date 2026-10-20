@@ -83,7 +83,7 @@ if(BUILD_TESTING)
 
   add_rostest_with_parameters_gmock(test_imu_sensor_covariance_broadcaster
     test/test_imu_sensor_covariance_broadcaster.cpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/test/test_imu_sensor_covariance_broadcaster_params.yaml
+    ${CMAKE_CURRENT_SOURCE_DIR}/test/imu_sensor_covariance_broadcaster_params.yaml
   )
   target_include_directories(test_imu_sensor_covariance_broadcaster PRIVATE include)
   target_link_libraries(test_imu_sensor_covariance_broadcaster
