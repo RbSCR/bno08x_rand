@@ -1,4 +1,4 @@
-:github_url: https://github.com/ros-controls/ros2_controllers/blob/{REPOS_FILE_BRANCH}/imu_sensor_covariance_broadcaster/doc/userdoc.rst
+
 
 .. _imu_sensor_covariance_broadcaster_userdoc:
 
@@ -7,7 +7,7 @@ IMU Sensor Covariance Broadcaster
 Broadcaster of messages from IMU sensor.
 The published message type is ``sensor_msgs/msg/Imu``.
 
-The controller is a wrapper around ``IMUSensorCovariance`` semantic component (see ``controller_interface`` package).
+The controller is a wrapper around ``IMUSensorCovariance`` semantic component (provided in this package).
 
 Parameters
 ^^^^^^^^^^^
@@ -17,11 +17,3 @@ List of parameters
 =========================
 .. generate_parameter_library_details:: ../src/imu_sensor_covariance_broadcaster_parameters.yaml
 
-
-An example parameter file
-=========================
-
-An example parameter file for this controller can be found in `the test directory <https://github.com/ros-controls/ros2_controllers/blob/{REPOS_FILE_BRANCH}/imu_sensor_covariance_broadcaster/test/imu_sensor_covariance_broadcaster_params.yaml>`_:
-
-.. literalinclude:: ../test/imu_sensor_covariance_broadcaster_params.yaml
-   :language: yaml
