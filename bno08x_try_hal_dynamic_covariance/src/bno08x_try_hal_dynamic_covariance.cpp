@@ -151,6 +151,121 @@ hardware_interface::CallbackReturn BNO08XTryHalDynamicCovariance::on_init(
     return hardware_interface::CallbackReturn::ERROR;
   }
 
+  // orientation covariance
+  if (const auto it = info_.hardware_parameters.find("orientation_covariance_unreliable");
+      it != info_.hardware_parameters.end()) {
+    try {
+      accuracy_orientation_covariance_[0] = std::stod(it->second);
+    } catch (const std::exception & e) {
+      RCLCPP_ERROR(logger_, "Convert-error orientation_covariance_unreliable: %s", e.what());
+      return hardware_interface::CallbackReturn::ERROR;
+    }
+  }
+  if (const auto it = info_.hardware_parameters.find("orientation_covariance_low");
+      it != info_.hardware_parameters.end()) {
+    try {
+      accuracy_orientation_covariance_[1] = std::stod(it->second);
+    } catch (const std::exception & e) {
+      RCLCPP_ERROR(logger_, "Convert-error orientation_covariance_low: %s", e.what());
+      return hardware_interface::CallbackReturn::ERROR;
+    }
+  }
+  if (const auto it = info_.hardware_parameters.find("orientation_covariance_medium");
+      it != info_.hardware_parameters.end()) {
+    try {
+      accuracy_orientation_covariance_[2] = std::stod(it->second);
+    } catch (const std::exception & e) {
+      RCLCPP_ERROR(logger_, "Convert-error orientation_covariance_medium: %s", e.what());
+      return hardware_interface::CallbackReturn::ERROR;
+    }
+  }
+  if (const auto it = info_.hardware_parameters.find("orientation_covariance_high");
+      it != info_.hardware_parameters.end()) {
+    try {
+      accuracy_orientation_covariance_[3] = std::stod(it->second);
+    } catch (const std::exception & e) {
+      RCLCPP_ERROR(logger_, "Convert-error orientation_covariance_high: %s", e.what());
+      return hardware_interface::CallbackReturn::ERROR;
+    }
+  }
+
+  // angular velocity covariance
+  if (const auto it = info_.hardware_parameters.find("angular_velocity_covariance_unreliable");
+      it != info_.hardware_parameters.end()) {
+    try {
+      accuracy_angular_velocity_covariance_[0] = std::stod(it->second);
+    } catch (const std::exception & e) {
+      RCLCPP_ERROR(logger_, "Convert-error angular_velocity_covariance_unreliable: %s", e.what());
+      return hardware_interface::CallbackReturn::ERROR;
+    }
+  }
+  if (const auto it = info_.hardware_parameters.find("angular_velocity_covariance_low");
+      it != info_.hardware_parameters.end()) {
+    try {
+      accuracy_angular_velocity_covariance_[1] = std::stod(it->second);
+    } catch (const std::exception & e) {
+      RCLCPP_ERROR(logger_, "Convert-error angular_velocity_covariance_low: %s", e.what());
+      return hardware_interface::CallbackReturn::ERROR;
+    }
+  }
+  if (const auto it = info_.hardware_parameters.find("angular_velocity_covariance_medium");
+      it != info_.hardware_parameters.end()) {
+    try {
+      accuracy_angular_velocity_covariance_[2] = std::stod(it->second);
+    } catch (const std::exception & e) {
+      RCLCPP_ERROR(logger_, "Convert-error angular_velocity_covariance_medium: %s", e.what());
+      return hardware_interface::CallbackReturn::ERROR;
+    }
+  }
+  if (const auto it = info_.hardware_parameters.find("angular_velocity_covariance_high");
+      it != info_.hardware_parameters.end()) {
+    try {
+      accuracy_angular_velocity_covariance_[3] = std::stod(it->second);
+    } catch (const std::exception & e) {
+      RCLCPP_ERROR(logger_, "Convert-error angular_velocity_covariance_high: %s", e.what());
+      return hardware_interface::CallbackReturn::ERROR;
+    }
+  }
+
+  // linear acceleration covariance
+  if (const auto it = info_.hardware_parameters.find("linear_acceleration_covariance_unreliable");
+      it != info_.hardware_parameters.end()) {
+    try {
+      accuracy_linear_acceleration_covariance_[0] = std::stod(it->second);
+    } catch (const std::exception & e) {
+      RCLCPP_ERROR(
+        logger_, "Convert-error linear_acceleration_covariance_unreliable: %s", e.what());
+      return hardware_interface::CallbackReturn::ERROR;
+    }
+  }
+  if (const auto it = info_.hardware_parameters.find("linear_acceleration_covariance_low");
+      it != info_.hardware_parameters.end()) {
+    try {
+      accuracy_linear_acceleration_covariance_[1] = std::stod(it->second);
+    } catch (const std::exception & e) {
+      RCLCPP_ERROR(logger_, "Convert-error linear_acceleration_covariance_low: %s", e.what());
+      return hardware_interface::CallbackReturn::ERROR;
+    }
+  }
+  if (const auto it = info_.hardware_parameters.find("linear_acceleration_covariance_medium");
+      it != info_.hardware_parameters.end()) {
+    try {
+      accuracy_linear_acceleration_covariance_[2] = std::stod(it->second);
+    } catch (const std::exception & e) {
+      RCLCPP_ERROR(logger_, "Convert-error linear_acceleration_covariance_medium: %s", e.what());
+      return hardware_interface::CallbackReturn::ERROR;
+    }
+  }
+  if (const auto it = info_.hardware_parameters.find("linear_acceleration_covariance_high");
+      it != info_.hardware_parameters.end()) {
+    try {
+      accuracy_linear_acceleration_covariance_[3] = std::stod(it->second);
+    } catch (const std::exception & e) {
+      RCLCPP_ERROR(logger_, "Convert-error linear_acceleration_covariance_high: %s", e.what());
+      return hardware_interface::CallbackReturn::ERROR;
+    }
+  }
+
   // enable_magnetometer (default: false)
   enable_magnetometer_ = parse_bool_param("enable_magnetometer", false);
 
@@ -178,6 +293,44 @@ hardware_interface::CallbackReturn BNO08XTryHalDynamicCovariance::on_init(
         logger_, "Magnetometer rate (%d Hz) is equal to or smaller than zero", magnetometer_rate_);
       return hardware_interface::CallbackReturn::ERROR;
     }
+
+    // magnetometer covariance
+    if (const auto it = info_.hardware_parameters.find("magnetometer_covariance_unreliable");
+        it != info_.hardware_parameters.end()) {
+      try {
+        accuracy_magnetometer_covariance_[0] = std::stod(it->second);
+      } catch (const std::exception & e) {
+        RCLCPP_ERROR(logger_, "Convert-error magnetometer_covariance_unreliable: %s", e.what());
+        return hardware_interface::CallbackReturn::ERROR;
+      }
+    }
+    if (const auto it = info_.hardware_parameters.find("magnetometer_covariance_low");
+        it != info_.hardware_parameters.end()) {
+      try {
+        accuracy_magnetometer_covariance_[1] = std::stod(it->second);
+      } catch (const std::exception & e) {
+        RCLCPP_ERROR(logger_, "Convert-error magnetometer_covariance_low: %s", e.what());
+        return hardware_interface::CallbackReturn::ERROR;
+      }
+    }
+    if (const auto it = info_.hardware_parameters.find("magnetometer_covariance_medium");
+        it != info_.hardware_parameters.end()) {
+      try {
+        accuracy_magnetometer_covariance_[2] = std::stod(it->second);
+      } catch (const std::exception & e) {
+        RCLCPP_ERROR(logger_, "Convert-error magnetometer_covariance_medium: %s", e.what());
+        return hardware_interface::CallbackReturn::ERROR;
+      }
+    }
+    if (const auto it = info_.hardware_parameters.find("magnetometer_covariance_high");
+        it != info_.hardware_parameters.end()) {
+      try {
+        accuracy_magnetometer_covariance_[3] = std::stod(it->second);
+      } catch (const std::exception & e) {
+        RCLCPP_ERROR(logger_, "Convert-error magnetometer_covariance_high: %s", e.what());
+        return hardware_interface::CallbackReturn::ERROR;
+      }
+    }
   }
 
   // enable_mock_mode (default: false)
@@ -189,7 +342,7 @@ hardware_interface::CallbackReturn BNO08XTryHalDynamicCovariance::on_init(
     return hardware_interface::CallbackReturn::ERROR;
   }
 
-  // Validate that each declared state interface name matches one of the 19 or 25 expected.
+  // Validate that each declared state interface name matches one of the 13 or 17 expected.
   std::vector<std::string> kExpected = {
     "orientation.x",
     "orientation.y",
@@ -201,30 +354,18 @@ hardware_interface::CallbackReturn BNO08XTryHalDynamicCovariance::on_init(
     "linear_acceleration.x",
     "linear_acceleration.y",
     "linear_acceleration.z",
-    "orientation_covariance_xx",
-    "orientation_covariance_yy",
-    "orientation_covariance_zz",
-    "angular_velocity_covariance_xx",
-    "angular_velocity_covariance_yy",
-    "angular_velocity_covariance_zz",
-    "linear_acceleration_covariance_xx",
-    "linear_acceleration_covariance_yy",
-    "linear_acceleration_covariance_zz"};
+    "orientation_covariance",
+    "angular_velocity_covariance",
+    "linear_acceleration_covariance"};
   std::string expected_txt =
     "orientation.{x,y,z,w}, angular_velocity.{x,y,z}, linear_acceleration.{x,y,z}, "
-    "orientation_covariance_{xx,yy,zz}, angular_velocity_covariance_{xx,yy,zz}, "
-    "linear_acceleration_covariance_{xx,yy,zz}";
+    "orientation_covariance, angular_velocity_covariance, linear_acceleration_covariance";
 
   if (enable_magnetometer_) {
     std::vector<std::string> magnetic_states = {
-      "magnetic_field.x",
-      "magnetic_field.y",
-      "magnetic_field.z",
-      "magnetic_field_covariance_xx",
-      "magnetic_field_covariance_yy",
-      "magnetic_field_covariance_zz"};
+      "magnetic_field.x", "magnetic_field.y", "magnetic_field.z", "magnetic_field_covariance"};
     kExpected.insert(kExpected.end(), magnetic_states.begin(), magnetic_states.end());
-    expected_txt.append(", magnetic_field.{x,y,z}, magnetic_field_covariance_{xx,yy,zz}");
+    expected_txt.append(", magnetic_field.{x,y,z}, magnetic_field_covariance");
   }
 
   for (const auto & si : info_.sensors[0].state_interfaces) {
@@ -237,11 +378,31 @@ hardware_interface::CallbackReturn BNO08XTryHalDynamicCovariance::on_init(
   }
 
   RCLCPP_INFO(
-    logger_,
-    "Initialized: i2c_bus=%d i2c_addr=0x%02X axis_remap=%s imu_rate=%d "
-    "magnetometer_enabled=%s magnetometer_rate=%d mock_enabled=%s",
-    i2c_bus_, i2c_addr_, axis_remap_.c_str(), imu_rate_, enable_magnetometer_ ? "true" : "false",
-    magnetometer_rate_, enable_mock_ ? "true" : "false");
+    logger_, "Initialized: i2c_bus=%d i2c_addr=0x%02X axis_remap=%s imu_rate=%d mock_enabled=%s",
+    i2c_bus_, i2c_addr_, axis_remap_.c_str(), imu_rate_, enable_mock_ ? "true" : "false");
+  RCLCPP_INFO(
+    logger_, "  orientation_covariance unreliable=%.12f low=%.12f medium=%.12f high=%.12f",
+    accuracy_orientation_covariance_[0], accuracy_orientation_covariance_[1],
+    accuracy_orientation_covariance_[2], accuracy_orientation_covariance_[3]);
+  RCLCPP_INFO(
+    logger_, "  angular_velocity_covariance unreliable=%.12f low=%.12f medium=%.12f high=%.12f",
+    accuracy_angular_velocity_covariance_[0], accuracy_angular_velocity_covariance_[1],
+    accuracy_angular_velocity_covariance_[2], accuracy_angular_velocity_covariance_[3]);
+  RCLCPP_INFO(
+    logger_, "  linear_acceleration_covariance unreliable=%.12f low=%.12f medium=%.12f high=%.12f",
+    accuracy_linear_acceleration_covariance_[0], accuracy_linear_acceleration_covariance_[1],
+    accuracy_linear_acceleration_covariance_[2], accuracy_linear_acceleration_covariance_[3]);
+
+  if (enable_magnetometer_) {
+    RCLCPP_INFO(
+      logger_, "  magnetometer_enabled=%s magnetometer_rate=%d",
+      enable_magnetometer_ ? "true" : "false", magnetometer_rate_);
+    RCLCPP_INFO(
+      logger_, "  magnetometer_covariance unreliable=%.12f low=%.12f medium=%.12f high=%.12f",
+      accuracy_magnetometer_covariance_[0], accuracy_magnetometer_covariance_[1],
+      accuracy_magnetometer_covariance_[2], accuracy_magnetometer_covariance_[3]);
+  }
+
   RCLCPP_INFO(logger_, "BNO08X hal dynamic covariance: %s is initialized", info_.name.c_str());
 
   return hardware_interface::CallbackReturn::SUCCESS;
@@ -263,9 +424,7 @@ hardware_interface::CallbackReturn BNO08XTryHalDynamicCovariance::on_configure(
     hw_orientation_x_ = 0.0;
     hw_orientation_y_ = 0.0;
     hw_orientation_z_ = 0.0;
-    hw_orientation_covariance_xx_ = 0.0;  // TODO(rbscr) replace 0.0 with a "good" covariance value
-    hw_orientation_covariance_yy_ = 0.0;
-    hw_orientation_covariance_zz_ = 0.0;
+    hw_orientation_covariance_ = 0.0;  // TODO(rbscr) replace 0.0 with a "good" covariance value
 
     // Angular velocity and linear acceleration stay at 0.0 (correct for a stationary mock).
     return hardware_interface::CallbackReturn::SUCCESS;
@@ -444,9 +603,7 @@ void BNO08XTryHalDynamicCovariance::sensor_callback(
         hw_magnetic_field_x_ = sensor_value->un.magneticField.x * microtesla_to_tesla_;
         hw_magnetic_field_y_ = sensor_value->un.magneticField.y * microtesla_to_tesla_;
         hw_magnetic_field_z_ = sensor_value->un.magneticField.z * microtesla_to_tesla_;
-        hw_magnetic_field_covariance_xx_ = magnetic_field_covariance_[sensor_value->status];
-        hw_magnetic_field_covariance_yy_ = magnetic_field_covariance_[sensor_value->status];
-        hw_magnetic_field_covariance_zz_ = magnetic_field_covariance_[sensor_value->status];
+        hw_magnetic_field_covariance_ = accuracy_magnetometer_covariance_[sensor_value->status];
       }
       break;
     case SH2_ROTATION_VECTOR:
@@ -454,25 +611,20 @@ void BNO08XTryHalDynamicCovariance::sensor_callback(
       hw_orientation_y_ = sensor_value->un.rotationVector.j;
       hw_orientation_z_ = sensor_value->un.rotationVector.k;
       hw_orientation_w_ = sensor_value->un.rotationVector.real;
-      hw_orientation_covariance_xx_ = orientation_covariance_[sensor_value->status];
-      hw_orientation_covariance_yy_ = orientation_covariance_[sensor_value->status];
-      hw_orientation_covariance_zz_ = orientation_covariance_[sensor_value->status];
+      hw_orientation_covariance_ = accuracy_orientation_covariance_[sensor_value->status];
       break;
     case SH2_ACCELEROMETER:
       hw_linear_acceleration_x_ = sensor_value->un.accelerometer.x;
       hw_linear_acceleration_y_ = sensor_value->un.accelerometer.y;
       hw_linear_acceleration_z_ = sensor_value->un.accelerometer.z;
-      hw_linear_acceleration_covariance_xx_ = linear_acceleration_covariance_[sensor_value->status];
-      hw_linear_acceleration_covariance_yy_ = linear_acceleration_covariance_[sensor_value->status];
-      hw_linear_acceleration_covariance_zz_ = linear_acceleration_covariance_[sensor_value->status];
+      hw_linear_acceleration_covariance_ =
+        accuracy_linear_acceleration_covariance_[sensor_value->status];
       break;
     case SH2_GYROSCOPE_CALIBRATED:
       hw_angular_velocity_x_ = sensor_value->un.gyroscope.x;
       hw_angular_velocity_y_ = sensor_value->un.gyroscope.y;
       hw_angular_velocity_z_ = sensor_value->un.gyroscope.z;
-      hw_angular_velocity_covariance_xx_ = angular_velocity_covariance_[sensor_value->status];
-      hw_angular_velocity_covariance_yy_ = angular_velocity_covariance_[sensor_value->status];
-      hw_angular_velocity_covariance_zz_ = angular_velocity_covariance_[sensor_value->status];
+      hw_angular_velocity_covariance_ = accuracy_angular_velocity_covariance_[sensor_value->status];
       break;
     default:
       break;
@@ -511,23 +663,15 @@ void BNO08XTryHalDynamicCovariance::close_hardware() {
   hw_linear_acceleration_x_ = 0.0;
   hw_linear_acceleration_y_ = 0.0;
   hw_linear_acceleration_z_ = 0.0;
-  hw_orientation_covariance_xx_ = 0.0;
-  hw_orientation_covariance_yy_ = 0.0;
-  hw_orientation_covariance_zz_ = 0.0;
-  hw_angular_velocity_covariance_xx_ = 0.0;
-  hw_angular_velocity_covariance_yy_ = 0.0;
-  hw_angular_velocity_covariance_zz_ = 0.0;
-  hw_linear_acceleration_covariance_xx_ = 0.0;
-  hw_linear_acceleration_covariance_yy_ = 0.0;
-  hw_linear_acceleration_covariance_zz_ = 0.0;
+  hw_orientation_covariance_ = 0.0;
+  hw_angular_velocity_covariance_ = 0.0;
+  hw_linear_acceleration_covariance_ = 0.0;
 
   if (enable_magnetometer_) {
     hw_magnetic_field_x_ = 0.0;
     hw_magnetic_field_y_ = 0.0;
     hw_magnetic_field_z_ = 0.0;
-    hw_magnetic_field_covariance_xx_ = 0.0;
-    hw_magnetic_field_covariance_yy_ = 0.0;
-    hw_magnetic_field_covariance_zz_ = 0.0;
+    hw_magnetic_field_covariance_ = 0.0;
   }
 }
 
@@ -551,39 +695,20 @@ BNO08XTryHalDynamicCovariance::export_state_interfaces() {
   state_interfaces.emplace_back(sensor_name, "linear_acceleration.y", &hw_linear_acceleration_y_);
   state_interfaces.emplace_back(sensor_name, "linear_acceleration.z", &hw_linear_acceleration_z_);
 
+  state_interfaces.emplace_back(sensor_name, "orientation_covariance", &hw_orientation_covariance_);
   state_interfaces.emplace_back(
-    sensor_name, "orientation_covariance_xx", &hw_orientation_covariance_xx_);
+    sensor_name, "angular_velocity_covariance", &hw_angular_velocity_covariance_);
   state_interfaces.emplace_back(
-    sensor_name, "orientation_covariance_yy", &hw_orientation_covariance_yy_);
-  state_interfaces.emplace_back(
-    sensor_name, "orientation_covariance_zz", &hw_orientation_covariance_zz_);
-
-  state_interfaces.emplace_back(
-    sensor_name, "angular_velocity_covariance_xx", &hw_angular_velocity_covariance_xx_);
-  state_interfaces.emplace_back(
-    sensor_name, "angular_velocity_covariance_yy", &hw_angular_velocity_covariance_yy_);
-  state_interfaces.emplace_back(
-    sensor_name, "angular_velocity_covariance_zz", &hw_angular_velocity_covariance_zz_);
-
-  state_interfaces.emplace_back(
-    sensor_name, "linear_acceleration_covariance_xx", &hw_linear_acceleration_covariance_xx_);
-  state_interfaces.emplace_back(
-    sensor_name, "linear_acceleration_covariance_yy", &hw_linear_acceleration_covariance_yy_);
-  state_interfaces.emplace_back(
-    sensor_name, "linear_acceleration_covariance_zz", &hw_linear_acceleration_covariance_zz_);
-
+    sensor_name, "linear_acceleration_covariance", &hw_linear_acceleration_covariance_);
   int state_count{13};
+
   if (enable_magnetometer_) {
     state_interfaces.emplace_back(sensor_name, "magnetic_field.x", &hw_magnetic_field_x_);
     state_interfaces.emplace_back(sensor_name, "magnetic_field.y", &hw_magnetic_field_y_);
     state_interfaces.emplace_back(sensor_name, "magnetic_field.z", &hw_magnetic_field_z_);
     state_interfaces.emplace_back(
-      sensor_name, "magnetic_field_covariance_xx", &hw_magnetic_field_covariance_xx_);
-    state_interfaces.emplace_back(
-      sensor_name, "magnetic_field_covariance_yy", &hw_magnetic_field_covariance_yy_);
-    state_interfaces.emplace_back(
-      sensor_name, "magnetic_field_covariance_zz", &hw_magnetic_field_covariance_zz_);
-    state_count += 6;
+      sensor_name, "magnetic_field_covariance", &hw_magnetic_field_covariance_);
+    state_count += 4;
   }
 
   return state_interfaces;

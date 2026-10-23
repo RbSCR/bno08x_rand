@@ -63,6 +63,66 @@ def generate_launch_description():
                 'See datasheet Figure 6-16  page 50.'
         ),
         DeclareLaunchArgument(
+            'orientation_covariance_unreliable',
+            default_value='0.0375',
+            description='Orientation covariance when orientation-sensor status is unreliable'
+        ),
+        DeclareLaunchArgument(
+            'orientation_covariance_low',
+            default_value='0.0075',
+            description='Orientation covariance when orientation-sensor status is low'
+        ),
+        DeclareLaunchArgument(
+            'orientation_covariance_medium',
+            default_value='0.0015',
+            description='Orientation covariance when orientation-sensor status is medium'
+        ),
+        DeclareLaunchArgument(
+            'orientation_covariance_high',
+            default_value='0.00030',
+            description='Orientation covariance when orientation-sensor status is high'
+        ),
+        DeclareLaunchArgument(
+            'angular_velocity_covariance_unreliable',
+            default_value='0.0625',
+            description='Angular velocity covariance when angular-velocity-sensor status is unreliable'
+        ),
+        DeclareLaunchArgument(
+            'angular_velocity_covariance_low',
+            default_value='0.0125',
+            description='Angular velocity covariance when angular-velocity-sensor status is low'
+        ),
+        DeclareLaunchArgument(
+            'angular_velocity_covariance_medium',
+            default_value='0.0025',
+            description='Angular velocity covariance when angular-velocity-sensor status is medium'
+        ),
+        DeclareLaunchArgument(
+            'angular_velocity_covariance_high',
+            default_value='0.00050',
+            description='Angular velocity covariance when angular-velocity-sensor status is high'
+        ),
+        DeclareLaunchArgument(
+            'linear_acceleration_covariance_unreliable',
+            default_value='5.0000',
+            description='Linear acceleration covariance when linear_acceleration-sensor status is unreliable'
+        ),
+        DeclareLaunchArgument(
+            'linear_acceleration_covariance_low',
+            default_value='1.0000',
+            description='Linear acceleration covariance when linear_acceleration-sensor status is low'
+        ),
+        DeclareLaunchArgument(
+            'linear_acceleration_covariance_medium',
+            default_value='0.2000',
+            description='Linear acceleration covariance when linear_acceleration-sensor status is medium'
+        ),
+        DeclareLaunchArgument(
+            'linear_acceleration_covariance_high',
+            default_value='0.0400',
+            description='Linear acceleration covariance when linear_acceleration-sensor status is high'
+        ),
+        DeclareLaunchArgument(
             'enable_magnetometer',
             default_value='false',
             description='Enable magnetometer in hardware_interface'
@@ -72,6 +132,26 @@ def generate_launch_description():
             default_value='100',
             description='Magnetometer rate in Hz.'
                 'See datasheet Figure 6-16  page 50.'
+        ),
+        DeclareLaunchArgument(
+            'magnetometer_covariance_unreliable',
+            default_value='0.00000000125',
+            description='Magnetometer covariance when magnetometer status is unreliable'
+        ),
+        DeclareLaunchArgument(
+            'magnetometer_covariance_low',
+            default_value='.00000000025',
+            description='Magnetometer covariance when magnetometer status is low'
+        ),
+        DeclareLaunchArgument(
+            'magnetometer_covariance_medium',
+            default_value='0.000000000050',
+            description='Magnetometer covariance when magnetometer status is medium'
+        ),
+        DeclareLaunchArgument(
+            'magnetometer_covariance_high',
+            default_value='.000000000010',
+            description='Magnetometer covariance when magnetometer status is high'
         ),
         DeclareLaunchArgument(
             'enable_mock_mode',
@@ -100,8 +180,26 @@ def generate_launch_description():
     i2c_addr = LaunchConfiguration('i2c_addr')
     axis_remap = LaunchConfiguration('axis_remap')
     imu_rate = LaunchConfiguration('imu_rate')
+    orientation_covariance_unreliable = LaunchConfiguration('orientation_covariance_unreliable')
+    orientation_covariance_low = LaunchConfiguration('orientation_covariance_low')
+    orientation_covariance_medium = LaunchConfiguration('orientation_covariance_medium')
+    orientation_covariance_high = LaunchConfiguration('orientation_covariance_high')
+    angular_velocity_covariance_unreliable = LaunchConfiguration('angular_velocity_covariance_unreliable')
+    angular_velocity_covariance_low = LaunchConfiguration('angular_velocity_covariance_low')
+    angular_velocity_covariance_medium = LaunchConfiguration('angular_velocity_covariance_medium')
+    angular_velocity_covariance_high = LaunchConfiguration('angular_velocity_covariance_high')
+    linear_acceleration_covariance_unreliable = LaunchConfiguration('linear_acceleration_covariance_unreliable')
+    linear_acceleration_covariance_low = LaunchConfiguration('linear_acceleration_covariance_low')
+    linear_acceleration_covariance_medium = LaunchConfiguration('linear_acceleration_covariance_medium')
+    linear_acceleration_covariance_high = LaunchConfiguration('linear_acceleration_covariance_high')
+
     enable_magnetometer = LaunchConfiguration('enable_magnetometer')
     magnetometer_rate = LaunchConfiguration('magnetometer_rate')
+    magnetometer_covariance_unreliable = LaunchConfiguration('magnetometer_covariance_unreliable')
+    magnetometer_covariance_low = LaunchConfiguration('magnetometer_covariance_low')
+    magnetometer_covariance_medium = LaunchConfiguration('magnetometer_covariance_medium')
+    magnetometer_covariance_high = LaunchConfiguration('magnetometer_covariance_high')
+
     enable_mock = LaunchConfiguration('enable_mock_mode')
     publish_tf = LaunchConfiguration('publish_tf')
 
@@ -122,9 +220,41 @@ def generate_launch_description():
             ' ',
             'imu_rate:=', imu_rate,
             ' ',
+            'orientation_covariance_unreliable:=', orientation_covariance_unreliable,
+            ' ',
+            'orientation_covariance_low:=', orientation_covariance_low,
+            ' ',
+            'orientation_covariance_medium:=', orientation_covariance_medium,
+            ' ',
+            'orientation_covariance_high:=', orientation_covariance_high,
+            ' ',
+            'angular_velocity_covariance_unreliable:=', angular_velocity_covariance_unreliable,
+            ' ',
+            'angular_velocity_covariance_low:=', angular_velocity_covariance_low,
+            ' ',
+            'angular_velocity_covariance_medium:=', angular_velocity_covariance_medium,
+            ' ',
+            'angular_velocity_covariance_high:=', angular_velocity_covariance_high,
+            ' ',
+            'linear_acceleration_covariance_unreliable:=', linear_acceleration_covariance_unreliable,
+            ' ',
+            'linear_acceleration_covariance_low:=', linear_acceleration_covariance_low,
+            ' ',
+            'linear_acceleration_covariance_medium:=', linear_acceleration_covariance_medium,
+            ' ',
+            'linear_acceleration_covariance_high:=', linear_acceleration_covariance_high,
+            ' ',
             'enable_magnetometer:=', enable_magnetometer,
             ' ',
             'magnetometer_rate:=', magnetometer_rate,
+            ' ',
+            'magnetometer_covariance_unreliable:=', magnetometer_covariance_unreliable,
+            ' ',
+            'magnetometer_covariance_low:=', magnetometer_covariance_low,
+            ' ',
+            'magnetometer_covariance_medium:=', magnetometer_covariance_medium,
+            ' ',
+            'magnetometer_covariance_high:=', magnetometer_covariance_high,
             ' ',
             'enable_mock_mode:=', enable_mock,
         ]
