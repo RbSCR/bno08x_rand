@@ -83,36 +83,15 @@ void IMUSensorCovarianceBroadcasterTest::SetUp() {
   imu_linear_acceleration_z_ =
     std::make_shared<hardware_interface::StateInterface>(sensor_name_, "linear_acceleration.z");
   std::ignore = imu_linear_acceleration_z_->set_value(sensor_values_[9]);
-
-  imu_orientation_covariance_xx_ =
-    std::make_shared<hardware_interface::StateInterface>(sensor_name_, "orientation_covariance_xx");
-  std::ignore = imu_orientation_covariance_xx_->set_value(sensor_values_[10]);
-  imu_orientation_covariance_yy_ =
-    std::make_shared<hardware_interface::StateInterface>(sensor_name_, "orientation_covariance_yy");
-  std::ignore = imu_orientation_covariance_yy_->set_value(sensor_values_[11]);
-  imu_orientation_covariance_zz_ =
-    std::make_shared<hardware_interface::StateInterface>(sensor_name_, "orientation_covariance_zz");
-  std::ignore = imu_orientation_covariance_zz_->set_value(sensor_values_[12]);
-
-  imu_angular_velocity_covariance_xx_ = std::make_shared<hardware_interface::StateInterface>(
-    sensor_name_, "angular_velocity_covariance_xx");
-  std::ignore = imu_angular_velocity_covariance_xx_->set_value(sensor_values_[13]);
-  imu_angular_velocity_covariance_yy_ = std::make_shared<hardware_interface::StateInterface>(
-    sensor_name_, "angular_velocity_covariance_yy");
-  std::ignore = imu_angular_velocity_covariance_yy_->set_value(sensor_values_[14]);
-  imu_angular_velocity_covariance_zz_ = std::make_shared<hardware_interface::StateInterface>(
-    sensor_name_, "angular_velocity_covariance_zz");
-  std::ignore = imu_angular_velocity_covariance_zz_->set_value(sensor_values_[15]);
-
-  imu_linear_acceleration_covariance_xx_ = std::make_shared<hardware_interface::StateInterface>(
-    sensor_name_, "linear_acceleration_covariance_xx");
-  std::ignore = imu_linear_acceleration_covariance_xx_->set_value(sensor_values_[16]);
-  imu_linear_acceleration_covariance_yy_ = std::make_shared<hardware_interface::StateInterface>(
-    sensor_name_, "linear_acceleration_covariance_yy");
-  std::ignore = imu_linear_acceleration_covariance_yy_->set_value(sensor_values_[17]);
-  imu_linear_acceleration_covariance_zz_ = std::make_shared<hardware_interface::StateInterface>(
-    sensor_name_, "linear_acceleration_covariance_zz");
-  std::ignore = imu_linear_acceleration_covariance_zz_->set_value(sensor_values_[18]);
+  imu_orientation_covariance_ =
+    std::make_shared<hardware_interface::StateInterface>(sensor_name_, "orientation_covariance");
+  std::ignore = imu_orientation_covariance_->set_value(sensor_values_[10]);
+  imu_angular_velocity_covariance_ = std::make_shared<hardware_interface::StateInterface>(
+    sensor_name_, "angular_velocity_covariance");
+  std::ignore = imu_angular_velocity_covariance_->set_value(sensor_values_[11]);
+  imu_linear_acceleration_covariance_ = std::make_shared<hardware_interface::StateInterface>(
+    sensor_name_, "linear_acceleration_covariance");
+  std::ignore = imu_linear_acceleration_covariance_->set_value(sensor_values_[12]);
 }
 
 void IMUSensorCovarianceBroadcasterTest::TearDown() { imu_broadcaster_.reset(nullptr); }
@@ -141,15 +120,9 @@ void IMUSensorCovarianceBroadcasterTest::SetUpIMUCovarianceBroadcaster(
   state_ifs.emplace_back(imu_linear_acceleration_x_, nullptr);
   state_ifs.emplace_back(imu_linear_acceleration_y_, nullptr);
   state_ifs.emplace_back(imu_linear_acceleration_z_, nullptr);
-  state_ifs.emplace_back(imu_orientation_covariance_xx_, nullptr);
-  state_ifs.emplace_back(imu_orientation_covariance_yy_, nullptr);
-  state_ifs.emplace_back(imu_orientation_covariance_zz_, nullptr);
-  state_ifs.emplace_back(imu_angular_velocity_covariance_xx_, nullptr);
-  state_ifs.emplace_back(imu_angular_velocity_covariance_yy_, nullptr);
-  state_ifs.emplace_back(imu_angular_velocity_covariance_zz_, nullptr);
-  state_ifs.emplace_back(imu_linear_acceleration_covariance_xx_, nullptr);
-  state_ifs.emplace_back(imu_linear_acceleration_covariance_yy_, nullptr);
-  state_ifs.emplace_back(imu_linear_acceleration_covariance_zz_, nullptr);
+  state_ifs.emplace_back(imu_orientation_covariance_, nullptr);
+  state_ifs.emplace_back(imu_angular_velocity_covariance_, nullptr);
+  state_ifs.emplace_back(imu_linear_acceleration_covariance_, nullptr);
 
   imu_broadcaster_->assign_interfaces({}, std::move(state_ifs));
 }
@@ -161,7 +134,7 @@ void IMUSensorCovarianceBroadcasterTest::subscribe_and_get_message(
   rclcpp::Node test_subscription_node("test_subscription_node");
   auto subs_callback = [&](const sensor_msgs::msg::Imu::SharedPtr msg) { received_msg = msg; };
   auto subscription = test_subscription_node.create_subscription<sensor_msgs::msg::Imu>(
-    "/test_imu_sensor_covariance_broadcaster/imu", 19, subs_callback);
+    "/test_imu_sensor_covariance_broadcaster/imu", 13, subs_callback);
   rclcpp::executors::SingleThreadedExecutor executor;
   executor.add_node(test_subscription_node.get_node_base_interface());
 
@@ -206,7 +179,7 @@ TEST_F(IMUSensorCovarianceBroadcasterTest, SensorName_Configure_Success) {
   ASSERT_THAT(cmd_if_conf.names, IsEmpty());
   EXPECT_EQ(cmd_if_conf.type, controller_interface::interface_configuration_type::NONE);
   auto state_if_conf = imu_broadcaster_->state_interface_configuration();
-  ASSERT_THAT(state_if_conf.names, SizeIs(19lu));
+  ASSERT_THAT(state_if_conf.names, SizeIs(13lu));
   EXPECT_EQ(state_if_conf.type, controller_interface::interface_configuration_type::INDIVIDUAL);
 }
 
@@ -226,7 +199,7 @@ TEST_F(IMUSensorCovarianceBroadcasterTest, SensorName_Activate_Success) {
   ASSERT_THAT(cmd_if_conf.names, IsEmpty());
   EXPECT_EQ(cmd_if_conf.type, controller_interface::interface_configuration_type::NONE);
   auto state_if_conf = imu_broadcaster_->state_interface_configuration();
-  ASSERT_THAT(state_if_conf.names, SizeIs(19lu));
+  ASSERT_THAT(state_if_conf.names, SizeIs(13lu));
   EXPECT_EQ(state_if_conf.type, controller_interface::interface_configuration_type::INDIVIDUAL);
 
   // deactivate passed
@@ -237,7 +210,7 @@ TEST_F(IMUSensorCovarianceBroadcasterTest, SensorName_Activate_Success) {
   ASSERT_THAT(cmd_if_conf.names, IsEmpty());
   EXPECT_EQ(cmd_if_conf.type, controller_interface::interface_configuration_type::NONE);
   state_if_conf = imu_broadcaster_->state_interface_configuration();
-  ASSERT_THAT(state_if_conf.names, SizeIs(19lu));  // did not change
+  ASSERT_THAT(state_if_conf.names, SizeIs(13lu));  // did not change
   EXPECT_EQ(state_if_conf.type, controller_interface::interface_configuration_type::INDIVIDUAL);
 }
 
@@ -342,7 +315,7 @@ TEST_F(IMUSensorCovarianceBroadcasterTest, SensorStatePublishTest_with_rotation_
   //
   // Check the exported state interfaces
   const auto exported_state_interfaces = imu_broadcaster_->export_state_interfaces();
-  ASSERT_EQ(exported_state_interfaces.size(), 19u);
+  ASSERT_EQ(exported_state_interfaces.size(), 13lu);
   const std::string controller_name = imu_broadcaster_->get_node()->get_name();
   ASSERT_EQ(
     exported_state_interfaces[0]->get_name(),
@@ -374,36 +347,15 @@ TEST_F(IMUSensorCovarianceBroadcasterTest, SensorStatePublishTest_with_rotation_
   ASSERT_EQ(
     exported_state_interfaces[9]->get_name(),
     controller_name + "/" + sensor_name_ + "/linear_acceleration.z");
-
   ASSERT_EQ(
     exported_state_interfaces[10]->get_name(),
-    controller_name + "/" + sensor_name_ + "/orientation_covariance_xx");
+    controller_name + "/" + sensor_name_ + "/orientation_covariance");
   ASSERT_EQ(
     exported_state_interfaces[11]->get_name(),
-    controller_name + "/" + sensor_name_ + "/orientation_covariance_yy");
+    controller_name + "/" + sensor_name_ + "/angular_velocity_covariance");
   ASSERT_EQ(
     exported_state_interfaces[12]->get_name(),
-    controller_name + "/" + sensor_name_ + "/orientation_covariance_zz");
-
-  ASSERT_EQ(
-    exported_state_interfaces[13]->get_name(),
-    controller_name + "/" + sensor_name_ + "/angular_velocity_covariance_xx");
-  ASSERT_EQ(
-    exported_state_interfaces[14]->get_name(),
-    controller_name + "/" + sensor_name_ + "/angular_velocity_covariance_yy");
-  ASSERT_EQ(
-    exported_state_interfaces[15]->get_name(),
-    controller_name + "/" + sensor_name_ + "/angular_velocity_covariance_zz");
-
-  ASSERT_EQ(
-    exported_state_interfaces[16]->get_name(),
-    controller_name + "/" + sensor_name_ + "/linear_acceleration_covariance_xx");
-  ASSERT_EQ(
-    exported_state_interfaces[17]->get_name(),
-    controller_name + "/" + sensor_name_ + "/linear_acceleration_covariance_yy");
-  ASSERT_EQ(
-    exported_state_interfaces[18]->get_name(),
-    controller_name + "/" + sensor_name_ + "/linear_acceleration_covariance_zz");
+    controller_name + "/" + sensor_name_ + "/linear_acceleration_covariance");
 
   ASSERT_EQ(exported_state_interfaces[0]->get_interface_name(), "orientation.x");
   ASSERT_EQ(exported_state_interfaces[1]->get_interface_name(), "orientation.y");
@@ -415,21 +367,9 @@ TEST_F(IMUSensorCovarianceBroadcasterTest, SensorStatePublishTest_with_rotation_
   ASSERT_EQ(exported_state_interfaces[7]->get_interface_name(), "linear_acceleration.x");
   ASSERT_EQ(exported_state_interfaces[8]->get_interface_name(), "linear_acceleration.y");
   ASSERT_EQ(exported_state_interfaces[9]->get_interface_name(), "linear_acceleration.z");
-
-  ASSERT_EQ(exported_state_interfaces[10]->get_interface_name(), "orientation_covariance_xx");
-  ASSERT_EQ(exported_state_interfaces[11]->get_interface_name(), "orientation_covariance_yy");
-  ASSERT_EQ(exported_state_interfaces[12]->get_interface_name(), "orientation_covariance_zz");
-
-  ASSERT_EQ(exported_state_interfaces[13]->get_interface_name(), "angular_velocity_covariance_xx");
-  ASSERT_EQ(exported_state_interfaces[14]->get_interface_name(), "angular_velocity_covariance_yy");
-  ASSERT_EQ(exported_state_interfaces[15]->get_interface_name(), "angular_velocity_covariance_zz");
-
-  ASSERT_EQ(
-    exported_state_interfaces[16]->get_interface_name(), "linear_acceleration_covariance_xx");
-  ASSERT_EQ(
-    exported_state_interfaces[17]->get_interface_name(), "linear_acceleration_covariance_yy");
-  ASSERT_EQ(
-    exported_state_interfaces[18]->get_interface_name(), "linear_acceleration_covariance_zz");
+  ASSERT_EQ(exported_state_interfaces[10]->get_interface_name(), "orientation_covariance");
+  ASSERT_EQ(exported_state_interfaces[11]->get_interface_name(), "angular_velocity_covariance");
+  ASSERT_EQ(exported_state_interfaces[12]->get_interface_name(), "linear_acceleration_covariance");
 
   EXPECT_NEAR(imu_msg.orientation.x, exported_state_interfaces[0]->get_optional().value(), 1e-5);
   EXPECT_NEAR(imu_msg.orientation.y, exported_state_interfaces[1]->get_optional().value(), 1e-5);

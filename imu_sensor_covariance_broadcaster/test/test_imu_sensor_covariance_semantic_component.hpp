@@ -56,17 +56,17 @@ public:
   void TearDown();
 
 protected:
-  const size_t size_ = 19;
+  const size_t size_ = 13;
   const std::string sensor_name_ = "test_IMU";
   std::array<double, 4> orientation_values_ = {{1.1, 1.2, 1.3, 1.4}};
   std::array<double, 3> angular_velocity_values_ = {{2.1, 2.2, 2.3}};
   std::array<double, 3> linear_acceleration_values_ = {{3.1, 3.2, 3.3}};
   std::array<double, 9> orientation_covariance_values_{
-    {0.11, 0.0, 0.0, 0.0, 0.12, 0.0, 0.0, 0.0, 0.13}};
+    {0.11, 0.0, 0.0, 0.0, 0.11, 0.0, 0.0, 0.0, 0.11}};
   std::array<double, 9> angular_velocity_covariance_values_{
-    {0.21, 0.0, 0.0, 0.0, 0.22, 0.0, 0.0, 0.0, 0.23}};
+    {0.21, 0.0, 0.0, 0.0, 0.21, 0.0, 0.0, 0.0, 0.21}};
   std::array<double, 9> linear_acceleration_covariance_values_{
-    {0.31, 0.0, 0.0, 0.0, 0.32, 0.0, 0.0, 0.0, 0.33}};
+    {0.31, 0.0, 0.0, 0.0, 0.31, 0.0, 0.0, 0.0, 0.31}};
   std::unique_ptr<TestableIMUSensor> imu_sensor_;
 
   std::vector<std::string> full_interface_names_;
@@ -81,15 +81,9 @@ protected:
     "linear_acceleration.x",
     "linear_acceleration.y",
     "linear_acceleration.z",
-    "orientation_covariance_xx",
-    "orientation_covariance_yy",
-    "orientation_covariance_zz",
-    "angular_velocity_covariance_xx",
-    "angular_velocity_covariance_yy",
-    "angular_velocity_covariance_zz",
-    "linear_acceleration_covariance_xx",
-    "linear_acceleration_covariance_yy",
-    "linear_acceleration_covariance_zz"};
+    "orientation_covariance",
+    "angular_velocity_covariance",
+    "linear_acceleration_covariance"};
 };
 
 #endif  // SEMANTIC_COMPONENT__TEST_IMU_SENSOR_COVARIANCE_SEMANTIC_COMPONENT_HPP_

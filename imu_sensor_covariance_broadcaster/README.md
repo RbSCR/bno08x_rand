@@ -1,6 +1,6 @@
 # imu_sensor_covariance_broadcaster
 
-![Project Status](https://img.shields.io/badge/Status-Finished-green)
+![Project Status](https://img.shields.io/badge/Status-Work%20In%20Progress-orange)
 ![ROS 2](https://img.shields.io/badge/ROS%202-Jazzy%20|%20Kilted%20(Ubuntu%2024.04)-blue?style=flat&logo=ros&logoSize=auto)
 ![C++](https://img.shields.io/badge/C++-17-blue?style=flat&logo=cplusplus&logoColor=white)
 ![License](https://img.shields.io/github/license/rbscr/bno08x_rand?label=License)
@@ -54,15 +54,9 @@ The following parameters used in the original package have been removed:
 | `linear_acceleration.x` | m/s² | Accelerometer X |
 | `linear_acceleration.y` | m/s² | Accelerometer Y |
 | `linear_acceleration.z` | m/s² | Accelerometer Z |
-| **`orientation_covariance_xx`** | – | **Orientation X covariance** |
-| **`orientation_covariance_yy`** | – | **Orientation Y covariance** |
-| **`orientation_covariance_zz`** | – | **Orientation Z covariance** |
-| **`angular_velocity_covariance_xx`** | - | **Gyroscope X covariance** |
-| **`angular_velocity_covariance_yy`** | - | **Gyroscope Y covariance** |
-| **`angular_velocity_covariance_zz`** | - | **Gyroscope Z covariance** |
-| **`linear_acceleration_covariance_xx`** | - | **Accelerometer X covariance** |
-| **`linear_acceleration_covariance_yy`** | - | **Accelerometer Y covariance** |
-| **`linear_acceleration_covariance_zz`** | - | **Accelerometer Z covariance** |
+| **`orientation_covariance`** | – | **Orientation covariance** |
+| **`angular_velocity_covariance`** | - | **Gyroscope covariance** |
+| **`linear_acceleration_covariance`** | - | **Accelerometer covariance** |
 
 The new state interfaces marked in **bold**.
 
@@ -81,7 +75,7 @@ The related research package will have a launch-file to launch the broadcaster i
 
 ## Status / progess
 
-- Finished
+- Work in progress
 
 ## Related to research package
 

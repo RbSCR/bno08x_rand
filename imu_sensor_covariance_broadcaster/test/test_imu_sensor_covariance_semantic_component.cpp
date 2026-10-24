@@ -75,54 +75,36 @@ TEST_F(IMUSensorCovarianceTest, validate_all) {
   auto linear_acceleration_z = std::make_shared<hardware_interface::StateInterface>(
     sensor_name_, imu_interface_names_[9], &linear_acceleration_values_[2]);
 
-  // assign values to orientation covariance
-  auto orientation_covariance_xx = std::make_shared<hardware_interface::StateInterface>(
+  // assign value to orientation covariance
+  auto orientation_covariance = std::make_shared<hardware_interface::StateInterface>(
     sensor_name_, imu_interface_names_[10], &orientation_covariance_values_[0]);
-  auto orientation_covariance_yy = std::make_shared<hardware_interface::StateInterface>(
-    sensor_name_, imu_interface_names_[11], &orientation_covariance_values_[4]);
-  auto orientation_covariance_zz = std::make_shared<hardware_interface::StateInterface>(
-    sensor_name_, imu_interface_names_[12], &orientation_covariance_values_[8]);
 
-  // assign values to angular velocity covariance
-  auto angular_velocity_covariance_xx = std::make_shared<hardware_interface::StateInterface>(
-    sensor_name_, imu_interface_names_[13], &angular_velocity_covariance_values_[0]);
-  auto angular_velocity_covariance_yy = std::make_shared<hardware_interface::StateInterface>(
-    sensor_name_, imu_interface_names_[14], &angular_velocity_covariance_values_[4]);
-  auto angular_velocity_covariance_zz = std::make_shared<hardware_interface::StateInterface>(
-    sensor_name_, imu_interface_names_[15], &angular_velocity_covariance_values_[8]);
+  // assign value to angular velocity covariance
+  auto angular_velocity_covariance = std::make_shared<hardware_interface::StateInterface>(
+    sensor_name_, imu_interface_names_[11], &angular_velocity_covariance_values_[0]);
 
   // assign values to linear acceleration covariance
-  auto linear_acceleration_covariance_xx = std::make_shared<hardware_interface::StateInterface>(
-    sensor_name_, imu_interface_names_[16], &linear_acceleration_covariance_values_[0]);
-  auto linear_acceleration_covariance_yy = std::make_shared<hardware_interface::StateInterface>(
-    sensor_name_, imu_interface_names_[17], &linear_acceleration_covariance_values_[4]);
-  auto linear_acceleration_covariance_zz = std::make_shared<hardware_interface::StateInterface>(
-    sensor_name_, imu_interface_names_[18], &linear_acceleration_covariance_values_[8]);
+  auto linear_acceleration_covariance = std::make_shared<hardware_interface::StateInterface>(
+    sensor_name_, imu_interface_names_[12], &linear_acceleration_covariance_values_[0]);
 
   // create local state interface vector
   std::vector<hardware_interface::LoanedStateInterface> temp_state_interfaces;
-  temp_state_interfaces.reserve(19);
+  temp_state_interfaces.reserve(13);
 
   // insert the interfaces in jumbled sequence
-  temp_state_interfaces.emplace_back(orientation_covariance_yy);
   temp_state_interfaces.emplace_back(angular_velocity_y);
   temp_state_interfaces.emplace_back(orientation_y);
-  temp_state_interfaces.emplace_back(linear_acceleration_covariance_yy);
   temp_state_interfaces.emplace_back(linear_acceleration_y);
   temp_state_interfaces.emplace_back(orientation_x);
-  temp_state_interfaces.emplace_back(angular_velocity_covariance_zz);
-  temp_state_interfaces.emplace_back(linear_acceleration_covariance_xx);
+  temp_state_interfaces.emplace_back(linear_acceleration_covariance);
   temp_state_interfaces.emplace_back(linear_acceleration_z);
   temp_state_interfaces.emplace_back(angular_velocity_z);
   temp_state_interfaces.emplace_back(orientation_z);
-  temp_state_interfaces.emplace_back(angular_velocity_covariance_yy);
-  temp_state_interfaces.emplace_back(orientation_covariance_xx);
-  temp_state_interfaces.emplace_back(angular_velocity_covariance_xx);
+  temp_state_interfaces.emplace_back(angular_velocity_covariance);
+  temp_state_interfaces.emplace_back(orientation_covariance);
   temp_state_interfaces.emplace_back(orientation_w);
-  temp_state_interfaces.emplace_back(linear_acceleration_covariance_zz);
   temp_state_interfaces.emplace_back(angular_velocity_x);
   temp_state_interfaces.emplace_back(linear_acceleration_x);
-  temp_state_interfaces.emplace_back(orientation_covariance_zz);
 
   // now call the function to make them in order like interface_names
   imu_sensor_->assign_loaned_state_interfaces(temp_state_interfaces);

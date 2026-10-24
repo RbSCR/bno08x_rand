@@ -167,7 +167,7 @@ The hardware parameters (see the hardware parameter table in original package) c
 ### Todo
 
 - the launch files still needs to be updated to use the `imu_sensor_covariance_broadcaster`
-- physical test
+- physical test: done > ok
 - when the physical test is ok the `magnetometer__covariance_broadcaster` package can be created
 
 ## Related research packages
