@@ -148,27 +148,10 @@ IMUSensorCovarianceBroadcaster::on_export_state_interfaces_list() {
   add_interface("linear_acceleration.y", state_message_.linear_acceleration.y);
   add_interface("linear_acceleration.z", state_message_.linear_acceleration.z);
 
-    // Covariances: use the diagonal entries (xx, yy, zz) to match the semantic component
-  // orientation_covariance[0], [4], [8]
-  add_interface("orientation_covariance_xx", state_message_.orientation_covariance[0]);
-  add_interface("orientation_covariance_yy", state_message_.orientation_covariance[4]);
-  add_interface("orientation_covariance_zz", state_message_.orientation_covariance[8]);
-
-  // angular_velocity_covariance[0], [4], [8]
-  add_interface(
-    "angular_velocity_covariance_xx", state_message_.angular_velocity_covariance[0]);
-  add_interface(
-    "angular_velocity_covariance_yy", state_message_.angular_velocity_covariance[4]);
-  add_interface(
-    "angular_velocity_covariance_zz", state_message_.angular_velocity_covariance[8]);
-
-  // linear_acceleration_covariance[0], [4], [8]
-  add_interface(
-    "linear_acceleration_covariance_xx", state_message_.linear_acceleration_covariance[0]);
-  add_interface(
-    "linear_acceleration_covariance_yy", state_message_.linear_acceleration_covariance[4]);
-  add_interface(
-    "linear_acceleration_covariance_zz", state_message_.linear_acceleration_covariance[8]);
+  // Covariances: use the xx diagonal entry to match the semantic component
+  add_interface("orientation_covariance", state_message_.orientation_covariance[0]);
+  add_interface("angular_velocity_covariance", state_message_.angular_velocity_covariance[0]);
+  add_interface("linear_acceleration_covariance", state_message_.linear_acceleration_covariance[0]);
 
   return exported_state_interfaces;
 }

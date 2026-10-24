@@ -67,19 +67,18 @@ public:
 protected:
   const std::string sensor_name_ = "imu_sensor";
   const std::string frame_id_ = "imu_sensor_frame";
-  const std::array<double, 19> sensor_values_ = {
-    {0.1826, 0.3651, 0.5477, 0.7303, 5.5, 6.6, 7.7, 8.8, 9.9, 10.10, 0.15, 0.16, 0.17, 0.25, 0.26,
-     0.27, 0.35, 0.36, 0.37}};
-  // Note: the orientation covariance values (elements 10, 11, 12),
-  // angular velocity covariance values (elements 13, 14, 15) and
-  // linear acceleration covariance (elements 16, 17, 18) in the sensor_values_ array should
+  const std::array<double, 13> sensor_values_ = {
+    {0.1826, 0.3651, 0.5477, 0.7303, 5.5, 6.6, 7.7, 8.8, 9.9, 10.10, 0.15, 0.25, 0.35}};
+  // Note: the orientation covariance value (element 10),
+  // angular velocity covariance value (element 11) and
+  // linear acceleration covariance value (element 12) in the sensor_values_ array should
   // be kept equal to the elements 0, 4 and 8 in the related ..._covariance_values_ arrays below.
   const std::array<double, 9> orientation_covariance_values_ = {
-    {0.15, 0.0, 0.0, 0.0, 0.16, 0.0, 0.0, 0.0, 0.17}};
+    {0.15, 0.0, 0.0, 0.0, 0.15, 0.0, 0.0, 0.0, 0.15}};
   const std::array<double, 9> angular_velocity_covariance_values_ = {
-    {0.25, 0.0, 0.0, 0.0, 0.26, 0.0, 0.0, 0.0, 0.27}};
+    {0.25, 0.0, 0.0, 0.0, 0.25, 0.0, 0.0, 0.0, 0.25}};
   const std::array<double, 9> linear_acceleration_covariance_values_ = {
-    {0.35, 0.0, 0.0, 0.0, 0.36, 0.0, 0.0, 0.0, 0.37}};
+    {0.35, 0.0, 0.0, 0.0, 0.35, 0.0, 0.0, 0.0, 0.35}};
 
   hardware_interface::StateInterface::SharedPtr imu_orientation_x_;
   hardware_interface::StateInterface::SharedPtr imu_orientation_y_;
@@ -91,15 +90,9 @@ protected:
   hardware_interface::StateInterface::SharedPtr imu_linear_acceleration_x_;
   hardware_interface::StateInterface::SharedPtr imu_linear_acceleration_y_;
   hardware_interface::StateInterface::SharedPtr imu_linear_acceleration_z_;
-  hardware_interface::StateInterface::SharedPtr imu_orientation_covariance_xx_;
-  hardware_interface::StateInterface::SharedPtr imu_orientation_covariance_yy_;
-  hardware_interface::StateInterface::SharedPtr imu_orientation_covariance_zz_;
-  hardware_interface::StateInterface::SharedPtr imu_angular_velocity_covariance_xx_;
-  hardware_interface::StateInterface::SharedPtr imu_angular_velocity_covariance_yy_;
-  hardware_interface::StateInterface::SharedPtr imu_angular_velocity_covariance_zz_;
-  hardware_interface::StateInterface::SharedPtr imu_linear_acceleration_covariance_xx_;
-  hardware_interface::StateInterface::SharedPtr imu_linear_acceleration_covariance_yy_;
-  hardware_interface::StateInterface::SharedPtr imu_linear_acceleration_covariance_zz_;
+  hardware_interface::StateInterface::SharedPtr imu_orientation_covariance_;
+  hardware_interface::StateInterface::SharedPtr imu_angular_velocity_covariance_;
+  hardware_interface::StateInterface::SharedPtr imu_linear_acceleration_covariance_;
 
   std::unique_ptr<FriendIMUSensorCovarianceBroadcaster> imu_broadcaster_;
 

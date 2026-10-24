@@ -49,15 +49,9 @@ public:
              {name + "/" + "linear_acceleration.x"},
              {name + "/" + "linear_acceleration.y"},
              {name + "/" + "linear_acceleration.z"},
-             {name + "/" + "orientation_covariance_xx"},
-             {name + "/" + "orientation_covariance_yy"},
-             {name + "/" + "orientation_covariance_zz"},
-             {name + "/" + "angular_velocity_covariance_xx"},
-             {name + "/" + "angular_velocity_covariance_yy"},
-             {name + "/" + "angular_velocity_covariance_zz"},
-             {name + "/" + "linear_acceleration_covariance_xx"},
-             {name + "/" + "linear_acceleration_covariance_yy"},
-             {name + "/" + "linear_acceleration_covariance_zz"}}) {}
+             {name + "/" + "orientation_covariance"},
+             {name + "/" + "angular_velocity_covariance"},
+             {name + "/" + "linear_acceleration_covariance"}}) {}
   /**
    * @brief Return orientation.
    *
@@ -194,7 +188,7 @@ private:
    */
   std::array<double, 9> get_orientation_covariance_from_data() const {
     std::array<double, 9> covariance{
-      {data_[10], 0.0, 0.0, 0.0, data_[11], 0.0, 0.0, 0.0, data_[12]}};
+      {data_[10], 0.0, 0.0, 0.0, data_[10], 0.0, 0.0, 0.0, data_[10]}};
 
     return covariance;
   }
@@ -206,7 +200,7 @@ private:
    */
   std::array<double, 9> get_angular_velocity_covariance_from_data() const {
     std::array<double, 9> covariance{
-      {data_[13], 0.0, 0.0, 0.0, data_[14], 0.0, 0.0, 0.0, data_[15]}};
+      {data_[11], 0.0, 0.0, 0.0, data_[11], 0.0, 0.0, 0.0, data_[11]}};
 
     return covariance;
   }
@@ -218,15 +212,14 @@ private:
    */
   std::array<double, 9> get_linear_acceleration_covariance_from_data() const {
     std::array<double, 9> covariance{
-      {data_[16], 0.0, 0.0, 0.0, data_[17], 0.0, 0.0, 0.0, data_[18]}};
+      {data_[12], 0.0, 0.0, 0.0, data_[12], 0.0, 0.0, 0.0, data_[12]}};
 
     return covariance;
   }
 
   // Array to store the data of the IMU sensor
-  mutable std::array<double, 19> data_{
-    {0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0,
-     0.0}};
+  mutable std::array<double, 13> data_{
+    {0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0}};
 };
 
 }  // namespace semantic_components
