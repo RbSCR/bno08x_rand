@@ -58,7 +58,7 @@ static rclcpp_lifecycle::State active_state() {
 
 // ── on_init ───────────────────────────────────────────────────────────────────
 
-TEST(InitTest, ValidParams) {
+TEST(InitTest, ValidBasicParams) {
   auto init = [](hardware_interface::HardwareInfo info) {
     bno08x_try_hal_dynamic_covariance::BNO08XTryHalDynamicCovariance hw;
     return hw.on_init(info);
@@ -78,64 +78,6 @@ TEST(InitTest, ValidParams) {
   imu_rate_nonstandard.hardware_parameters["imu_rate"] = "155";
   EXPECT_EQ(init(imu_rate_nonstandard), CallbackReturn::SUCCESS);
 
-  // orientation covariance
-  auto orient_covar_default_explicit = make_valid_imu_info();
-  orient_covar_default_explicit.hardware_parameters["orientation_covariance_unreliable"] = "0.0375";
-  orient_covar_default_explicit.hardware_parameters["orientation_covariance_low"] = "0.0075";
-  orient_covar_default_explicit.hardware_parameters["orientation_covariance_medium"] = "0.0015";
-  orient_covar_default_explicit.hardware_parameters["orientation_covariance_high"] = "0.00030";
-  EXPECT_EQ(init(orient_covar_default_explicit), CallbackReturn::SUCCESS);
-
-  auto orient_covar_nondefault = make_valid_imu_info();
-  orient_covar_nondefault.hardware_parameters["orientation_covariance_unreliable"] = "10.00";
-  orient_covar_nondefault.hardware_parameters["orientation_covariance_low"] = "7.5075";
-  orient_covar_nondefault.hardware_parameters["orientation_covariance_medium"] = "2.5025";
-  orient_covar_nondefault.hardware_parameters["orientation_covariance_high"] = "3.50035";
-  EXPECT_EQ(init(orient_covar_nondefault), CallbackReturn::SUCCESS);
-
-  // angular velocity covariance
-  auto angular_vel_covar_default_explicit = make_valid_imu_info();
-  angular_vel_covar_default_explicit.hardware_parameters["angular_velocity_covariance_unreliable"] =
-    "0.0625";
-  angular_vel_covar_default_explicit.hardware_parameters["angular_velocity_covariance_low"] =
-    "0.0125";
-  angular_vel_covar_default_explicit.hardware_parameters["angular_velocity_covariance_medium"] =
-    "0.0025";
-  angular_vel_covar_default_explicit.hardware_parameters["angular_velocity_covariance_high"] =
-    "0.00050";
-  EXPECT_EQ(init(angular_vel_covar_default_explicit), CallbackReturn::SUCCESS);
-
-  auto angular_vel_covar_nondefault = make_valid_imu_info();
-  angular_vel_covar_nondefault.hardware_parameters["angular_velocity_covariance_unreliable"] =
-    "10.0625";
-  angular_vel_covar_nondefault.hardware_parameters["angular_velocity_covariance_low"] = "1.2125";
-  angular_vel_covar_nondefault.hardware_parameters["angular_velocity_covariance_medium"] = "2.5025";
-  angular_vel_covar_nondefault.hardware_parameters["angular_velocity_covariance_high"] = "5.00050";
-  EXPECT_EQ(init(angular_vel_covar_nondefault), CallbackReturn::SUCCESS);
-
-  // linear acceleration covariance
-  auto linear_accel_covar_default_explicit = make_valid_imu_info();
-  linear_accel_covar_default_explicit
-    .hardware_parameters["linear_acceleration_covariance_unreliable"] = "5.0000";
-  linear_accel_covar_default_explicit.hardware_parameters["linear_acceleration_covariance_low"] =
-    "1.0000";
-  linear_accel_covar_default_explicit.hardware_parameters["linear_acceleration_covariance_medium"] =
-    "0.2000";
-  linear_accel_covar_default_explicit.hardware_parameters["linear_acceleration_covariance_high"] =
-    "0.0400";
-  EXPECT_EQ(init(linear_accel_covar_default_explicit), CallbackReturn::SUCCESS);
-
-  auto linear_accel_covar_nondefault = make_valid_imu_info();
-  linear_accel_covar_nondefault.hardware_parameters["linear_acceleration_covariance_unreliable"] =
-    "5.5000";
-  linear_accel_covar_nondefault.hardware_parameters["linear_acceleration_covariance_low"] =
-    "1.1000";
-  linear_accel_covar_nondefault.hardware_parameters["linear_acceleration_covariance_medium"] =
-    "2.2000";
-  linear_accel_covar_nondefault.hardware_parameters["linear_acceleration_covariance_high"] =
-    "4.0400";
-  EXPECT_EQ(init(linear_accel_covar_nondefault), CallbackReturn::SUCCESS);
-
   auto magnetometer_enabled = make_valid_imu_info();
   magnetometer_enabled.hardware_parameters["enable_magnetometer"] = "true";
   EXPECT_EQ(init(magnetometer_enabled), CallbackReturn::SUCCESS);
@@ -153,31 +95,6 @@ TEST(InitTest, ValidParams) {
   magnetometer_rate_nonstandard.hardware_parameters["enable_magnetometer"] = "true";
   magnetometer_rate_nonstandard.hardware_parameters["magnetometer_rate"] = "55";
   EXPECT_EQ(init(magnetometer_rate_nonstandard), CallbackReturn::SUCCESS);
-
-  // magnetometer covariance
-  auto magnetometer_covar_default_explicit = make_valid_imu_info();
-  magnetometer_covar_default_explicit.hardware_parameters["enable_magnetometer"] = "true";
-  magnetometer_covar_default_explicit.hardware_parameters["magnetometer_covariance_unreliable"] =
-    "0.00000000125";
-  magnetometer_covar_default_explicit.hardware_parameters["magnetometer_covariance_low"] =
-    "0.00000000025";
-  magnetometer_covar_default_explicit.hardware_parameters["magnetometer_covariance_medium"] =
-    "0.000000000050";
-  magnetometer_covar_default_explicit.hardware_parameters["magnetometer_covariance_high"] =
-    "0.000000000010";
-  EXPECT_EQ(init(magnetometer_covar_default_explicit), CallbackReturn::SUCCESS);
-
-  auto magnetometer_covar_nondefault = make_valid_imu_info();
-  magnetometer_covar_nondefault.hardware_parameters["enable_magnetometer"] = "true";
-  magnetometer_covar_nondefault.hardware_parameters["magnetometer_covariance_unreliable"] =
-    "1.25000000125";
-  magnetometer_covar_nondefault.hardware_parameters["magnetometer_covariance_low"] =
-    "2.50000000025";
-  magnetometer_covar_nondefault.hardware_parameters["magnetometer_covariance_medium"] =
-    "5.000000000050";
-  magnetometer_covar_nondefault.hardware_parameters["magnetometer_covariance_high"] =
-    "1.000000000010";
-  EXPECT_EQ(init(magnetometer_covar_nondefault), CallbackReturn::SUCCESS);
 
   auto mock_enabled = make_valid_imu_info();
   mock_enabled.hardware_parameters["enable_mock_mode"] = "true";
@@ -202,7 +119,7 @@ TEST(InitTest, ValidAllAxisRemaps) {
   }
 }
 
-TEST(InitTest, InvalidParamsFail) {
+TEST(InitTest, InvalidBasicParamsFail) {
   auto init = [](hardware_interface::HardwareInfo info) {
     bno08x_try_hal_dynamic_covariance::BNO08XTryHalDynamicCovariance hw;
     return hw.on_init(info);
@@ -232,15 +149,6 @@ TEST(InitTest, InvalidParamsFail) {
   bad_addr.hardware_parameters["i2c_addr"] = "XZ";
   EXPECT_EQ(init(bad_addr), CallbackReturn::ERROR);
 
-  // Unknown state interface name must be rejected
-  auto bad_iface = make_valid_imu_info();
-  bad_iface.sensors[0].state_interfaces.push_back([] {
-    hardware_interface::InterfaceInfo i;
-    i.name = "orientation.q";
-    return i;
-  }());
-  EXPECT_EQ(init(bad_iface), CallbackReturn::ERROR);
-
   auto imu_rate_tohigh = make_valid_imu_info();
   imu_rate_tohigh.hardware_parameters["imu_rate"] = "410";
   EXPECT_EQ(init(imu_rate_tohigh), CallbackReturn::ERROR);
@@ -256,86 +164,6 @@ TEST(InitTest, InvalidParamsFail) {
   auto imu_rate_stringvalue = make_valid_imu_info();
   imu_rate_stringvalue.hardware_parameters["imu_rate"] = "ABC";
   EXPECT_EQ(init(imu_rate_stringvalue), CallbackReturn::ERROR);
-
-  // orientation covariance wrong value
-  auto bad_iface_orientation_covariance = make_valid_imu_info();
-  bad_iface_orientation_covariance.sensors[0].state_interfaces.push_back([] {
-    hardware_interface::InterfaceInfo i;
-    i.name = "orientation_covariance_x";
-    return i;
-  }());
-  EXPECT_EQ(init(bad_iface_orientation_covariance), CallbackReturn::ERROR);
-
-  auto orient_covar_stringvalue_unrel = make_valid_imu_info();
-  orient_covar_stringvalue_unrel.hardware_parameters["orientation_covariance_unreliable"] = "ABC";
-  EXPECT_EQ(init(orient_covar_stringvalue_unrel), CallbackReturn::ERROR);
-
-  auto orient_covar_stringvalue_low = make_valid_imu_info();
-  orient_covar_stringvalue_low.hardware_parameters["orientation_covariance_low"] = "DEF";
-  EXPECT_EQ(init(orient_covar_stringvalue_low), CallbackReturn::ERROR);
-
-  auto orient_covar_stringvalue_medium = make_valid_imu_info();
-  orient_covar_stringvalue_medium.hardware_parameters["orientation_covariance_medium"] = "GHI";
-  EXPECT_EQ(init(orient_covar_stringvalue_medium), CallbackReturn::ERROR);
-
-  auto orient_covar_stringvalue_high = make_valid_imu_info();
-  orient_covar_stringvalue_high.hardware_parameters["orientation_covariance_high"] = "JKL";
-  EXPECT_EQ(init(orient_covar_stringvalue_high), CallbackReturn::ERROR);
-
-  // angular velocity covariance wrong value
-  auto bad_iface_angular_vel_covariance = make_valid_imu_info();
-  bad_iface_angular_vel_covariance.sensors[0].state_interfaces.push_back([] {
-    hardware_interface::InterfaceInfo i;
-    i.name = "angular_velocity_covariance_x";
-    return i;
-  }());
-  EXPECT_EQ(init(bad_iface_angular_vel_covariance), CallbackReturn::ERROR);
-
-  auto angular_vel_covar_stringvalue_unrel = make_valid_imu_info();
-  angular_vel_covar_stringvalue_unrel.hardware_parameters["orientation_covariance_unreliable"] =
-    "ABC";
-  EXPECT_EQ(init(angular_vel_covar_stringvalue_unrel), CallbackReturn::ERROR);
-
-  auto angular_vel_covar_stringvalue_low = make_valid_imu_info();
-  angular_vel_covar_stringvalue_low.hardware_parameters["orientation_covariance_low"] = "DEF";
-  EXPECT_EQ(init(angular_vel_covar_stringvalue_low), CallbackReturn::ERROR);
-
-  auto angular_vel_covar_stringvalue_medium = make_valid_imu_info();
-  angular_vel_covar_stringvalue_medium.hardware_parameters["orientation_covariance_medium"] = "GHI";
-  EXPECT_EQ(init(angular_vel_covar_stringvalue_medium), CallbackReturn::ERROR);
-
-  auto angular_vel_covar_stringvalue_high = make_valid_imu_info();
-  angular_vel_covar_stringvalue_high.hardware_parameters["orientation_covariance_high"] = "JKL";
-  EXPECT_EQ(init(angular_vel_covar_stringvalue_high), CallbackReturn::ERROR);
-
-  // linear acceleration covariance wrong value
-  auto bad_iface_linear_accel_covariance = make_valid_imu_info();
-  bad_iface_linear_accel_covariance.sensors[0].state_interfaces.push_back([] {
-    hardware_interface::InterfaceInfo i;
-    i.name = "linear_acceleration_covariance_x";
-    return i;
-  }());
-  EXPECT_EQ(init(bad_iface_linear_accel_covariance), CallbackReturn::ERROR);
-
-  auto linear_accel_covar_stringvalue_unrel = make_valid_imu_info();
-  linear_accel_covar_stringvalue_unrel
-    .hardware_parameters["linear_acceleration_covariance_unreliable"] = "ABC";
-  EXPECT_EQ(init(linear_accel_covar_stringvalue_unrel), CallbackReturn::ERROR);
-
-  auto linear_accel_covar_stringvalue_low = make_valid_imu_info();
-  linear_accel_covar_stringvalue_low.hardware_parameters["linear_acceleration_covariance_low"] =
-    "DEF";
-  EXPECT_EQ(init(linear_accel_covar_stringvalue_low), CallbackReturn::ERROR);
-
-  auto linear_accel_covar_stringvalue_medium = make_valid_imu_info();
-  linear_accel_covar_stringvalue_medium
-    .hardware_parameters["linear_acceleration_covariance_medium"] = "GHI";
-  EXPECT_EQ(init(linear_accel_covar_stringvalue_medium), CallbackReturn::ERROR);
-
-  auto linear_accel_covar_stringvalue_high = make_valid_imu_info();
-  linear_accel_covar_stringvalue_high.hardware_parameters["linear_acceleration_covariance_high"] =
-    "JKL";
-  EXPECT_EQ(init(linear_accel_covar_stringvalue_high), CallbackReturn::ERROR);
 
   auto magnetometer_rate_tohigh = make_valid_imu_info();
   magnetometer_rate_tohigh.hardware_parameters["enable_magnetometer"] = "true";
@@ -356,6 +184,45 @@ TEST(InitTest, InvalidParamsFail) {
   magnetometer_rate_stringvalue.hardware_parameters["enable_magnetometer"] = "true";
   magnetometer_rate_stringvalue.hardware_parameters["magnetometer_rate"] = "KLM";
   EXPECT_EQ(init(magnetometer_rate_stringvalue), CallbackReturn::ERROR);
+}
+
+TEST(InitTest, InvalidStateInterfaceFail) {
+  auto init = [](hardware_interface::HardwareInfo info) {
+    bno08x_try_hal_dynamic_covariance::BNO08XTryHalDynamicCovariance hw;
+    return hw.on_init(info);
+  };
+
+  auto bad_iface = make_valid_imu_info();
+  bad_iface.sensors[0].state_interfaces.push_back([] {
+    hardware_interface::InterfaceInfo i;
+    i.name = "orientation.q";
+    return i;
+  }());
+  EXPECT_EQ(init(bad_iface), CallbackReturn::ERROR);
+
+  auto bad_iface_orientation_covariance = make_valid_imu_info();
+  bad_iface_orientation_covariance.sensors[0].state_interfaces.push_back([] {
+    hardware_interface::InterfaceInfo i;
+    i.name = "orientation_covariance_x";
+    return i;
+  }());
+  EXPECT_EQ(init(bad_iface_orientation_covariance), CallbackReturn::ERROR);
+
+  auto bad_iface_angular_vel_covariance = make_valid_imu_info();
+  bad_iface_angular_vel_covariance.sensors[0].state_interfaces.push_back([] {
+    hardware_interface::InterfaceInfo i;
+    i.name = "angular_velocity_covariance_x";
+    return i;
+  }());
+  EXPECT_EQ(init(bad_iface_angular_vel_covariance), CallbackReturn::ERROR);
+
+  auto bad_iface_linear_accel_covariance = make_valid_imu_info();
+  bad_iface_linear_accel_covariance.sensors[0].state_interfaces.push_back([] {
+    hardware_interface::InterfaceInfo i;
+    i.name = "linear_acceleration_covariance_x";
+    return i;
+  }());
+  EXPECT_EQ(init(bad_iface_linear_accel_covariance), CallbackReturn::ERROR);
 
   auto bad_iface_magnetometer_covariance = make_valid_imu_info();
   bad_iface_magnetometer_covariance.sensors[0].state_interfaces.push_back([] {
@@ -364,6 +231,196 @@ TEST(InitTest, InvalidParamsFail) {
     return i;
   }());
   EXPECT_EQ(init(bad_iface_magnetometer_covariance), CallbackReturn::ERROR);
+}
+
+TEST(InitTest, ValidOrientationCovarianceParams) {
+  auto init = [](hardware_interface::HardwareInfo info) {
+    bno08x_try_hal_dynamic_covariance::BNO08XTryHalDynamicCovariance hw;
+    return hw.on_init(info);
+  };
+
+  auto orient_covar_default_explicit = make_valid_imu_info();
+  orient_covar_default_explicit.hardware_parameters["orientation_covariance_unreliable"] = "0.0375";
+  orient_covar_default_explicit.hardware_parameters["orientation_covariance_low"] = "0.0075";
+  orient_covar_default_explicit.hardware_parameters["orientation_covariance_medium"] = "0.0015";
+  orient_covar_default_explicit.hardware_parameters["orientation_covariance_high"] = "0.00030";
+  EXPECT_EQ(init(orient_covar_default_explicit), CallbackReturn::SUCCESS);
+
+  auto orient_covar_nondefault = make_valid_imu_info();
+  orient_covar_nondefault.hardware_parameters["orientation_covariance_unreliable"] = "10.00";
+  orient_covar_nondefault.hardware_parameters["orientation_covariance_low"] = "7.5075";
+  orient_covar_nondefault.hardware_parameters["orientation_covariance_medium"] = "2.5025";
+  orient_covar_nondefault.hardware_parameters["orientation_covariance_high"] = "3.50035";
+  EXPECT_EQ(init(orient_covar_nondefault), CallbackReturn::SUCCESS);
+}
+
+TEST(InitTest, InvalidOrientationCovarianceParamsFail) {
+  auto init = [](hardware_interface::HardwareInfo info) {
+    bno08x_try_hal_dynamic_covariance::BNO08XTryHalDynamicCovariance hw;
+    return hw.on_init(info);
+  };
+
+  auto orient_covar_stringvalue_unrel = make_valid_imu_info();
+  orient_covar_stringvalue_unrel.hardware_parameters["orientation_covariance_unreliable"] = "ABC";
+  EXPECT_EQ(init(orient_covar_stringvalue_unrel), CallbackReturn::ERROR);
+
+  auto orient_covar_stringvalue_low = make_valid_imu_info();
+  orient_covar_stringvalue_low.hardware_parameters["orientation_covariance_low"] = "DEF";
+  EXPECT_EQ(init(orient_covar_stringvalue_low), CallbackReturn::ERROR);
+
+  auto orient_covar_stringvalue_medium = make_valid_imu_info();
+  orient_covar_stringvalue_medium.hardware_parameters["orientation_covariance_medium"] = "GHI";
+  EXPECT_EQ(init(orient_covar_stringvalue_medium), CallbackReturn::ERROR);
+
+  auto orient_covar_stringvalue_high = make_valid_imu_info();
+  orient_covar_stringvalue_high.hardware_parameters["orientation_covariance_high"] = "JKL";
+  EXPECT_EQ(init(orient_covar_stringvalue_high), CallbackReturn::ERROR);
+}
+
+TEST(InitTest, ValidAngularVelocityCovarianceParams) {
+  auto init = [](hardware_interface::HardwareInfo info) {
+    bno08x_try_hal_dynamic_covariance::BNO08XTryHalDynamicCovariance hw;
+    return hw.on_init(info);
+  };
+
+  auto angular_vel_covar_default_explicit = make_valid_imu_info();
+  angular_vel_covar_default_explicit.hardware_parameters["angular_velocity_covariance_unreliable"] =
+    "0.0625";
+  angular_vel_covar_default_explicit.hardware_parameters["angular_velocity_covariance_low"] =
+    "0.0125";
+  angular_vel_covar_default_explicit.hardware_parameters["angular_velocity_covariance_medium"] =
+    "0.0025";
+  angular_vel_covar_default_explicit.hardware_parameters["angular_velocity_covariance_high"] =
+    "0.00050";
+  EXPECT_EQ(init(angular_vel_covar_default_explicit), CallbackReturn::SUCCESS);
+
+  auto angular_vel_covar_nondefault = make_valid_imu_info();
+  angular_vel_covar_nondefault.hardware_parameters["angular_velocity_covariance_unreliable"] =
+    "10.0625";
+  angular_vel_covar_nondefault.hardware_parameters["angular_velocity_covariance_low"] = "1.2125";
+  angular_vel_covar_nondefault.hardware_parameters["angular_velocity_covariance_medium"] = "2.5025";
+  angular_vel_covar_nondefault.hardware_parameters["angular_velocity_covariance_high"] = "5.00050";
+  EXPECT_EQ(init(angular_vel_covar_nondefault), CallbackReturn::SUCCESS);
+}
+
+TEST(InitTest, InvalidAngularVelocityCovarianceParamsFail) {
+  auto init = [](hardware_interface::HardwareInfo info) {
+    bno08x_try_hal_dynamic_covariance::BNO08XTryHalDynamicCovariance hw;
+    return hw.on_init(info);
+  };
+
+  auto angular_vel_covar_stringvalue_unrel = make_valid_imu_info();
+  angular_vel_covar_stringvalue_unrel
+    .hardware_parameters["angular_velocity_covariance_unreliable"] = "ABC";
+  EXPECT_EQ(init(angular_vel_covar_stringvalue_unrel), CallbackReturn::ERROR);
+
+  auto angular_vel_covar_stringvalue_low = make_valid_imu_info();
+  angular_vel_covar_stringvalue_low.hardware_parameters["angular_velocity_covariance_low"] = "DEF";
+  EXPECT_EQ(init(angular_vel_covar_stringvalue_low), CallbackReturn::ERROR);
+
+  auto angular_vel_covar_stringvalue_medium = make_valid_imu_info();
+  angular_vel_covar_stringvalue_medium.hardware_parameters["angular_velocity_covariance_medium"] =
+    "GHI";
+  EXPECT_EQ(init(angular_vel_covar_stringvalue_medium), CallbackReturn::ERROR);
+
+  auto angular_vel_covar_stringvalue_high = make_valid_imu_info();
+  angular_vel_covar_stringvalue_high.hardware_parameters["angular_velocity_covariance_high"] =
+    "JKL";
+  EXPECT_EQ(init(angular_vel_covar_stringvalue_high), CallbackReturn::ERROR);
+}
+
+TEST(InitTest, ValidLinearAccelerationCovarianceParams) {
+  auto init = [](hardware_interface::HardwareInfo info) {
+    bno08x_try_hal_dynamic_covariance::BNO08XTryHalDynamicCovariance hw;
+    return hw.on_init(info);
+  };
+
+  auto linear_accel_covar_default_explicit = make_valid_imu_info();
+  linear_accel_covar_default_explicit
+    .hardware_parameters["linear_acceleration_covariance_unreliable"] = "5.0000";
+  linear_accel_covar_default_explicit.hardware_parameters["linear_acceleration_covariance_low"] =
+    "1.0000";
+  linear_accel_covar_default_explicit.hardware_parameters["linear_acceleration_covariance_medium"] =
+    "0.2000";
+  linear_accel_covar_default_explicit.hardware_parameters["linear_acceleration_covariance_high"] =
+    "0.0400";
+  EXPECT_EQ(init(linear_accel_covar_default_explicit), CallbackReturn::SUCCESS);
+
+  auto linear_accel_covar_nondefault = make_valid_imu_info();
+  linear_accel_covar_nondefault.hardware_parameters["linear_acceleration_covariance_unreliable"] =
+    "5.5000";
+  linear_accel_covar_nondefault.hardware_parameters["linear_acceleration_covariance_low"] =
+    "1.1000";
+  linear_accel_covar_nondefault.hardware_parameters["linear_acceleration_covariance_medium"] =
+    "2.2000";
+  linear_accel_covar_nondefault.hardware_parameters["linear_acceleration_covariance_high"] =
+    "4.0400";
+  EXPECT_EQ(init(linear_accel_covar_nondefault), CallbackReturn::SUCCESS);
+}
+
+TEST(InitTest, InvalidLinearAccelerationCovarianceParamsFail) {
+  auto init = [](hardware_interface::HardwareInfo info) {
+    bno08x_try_hal_dynamic_covariance::BNO08XTryHalDynamicCovariance hw;
+    return hw.on_init(info);
+  };
+
+  auto linear_accel_covar_stringvalue_unrel = make_valid_imu_info();
+  linear_accel_covar_stringvalue_unrel
+    .hardware_parameters["linear_acceleration_covariance_unreliable"] = "ABC";
+  EXPECT_EQ(init(linear_accel_covar_stringvalue_unrel), CallbackReturn::ERROR);
+
+  auto linear_accel_covar_stringvalue_low = make_valid_imu_info();
+  linear_accel_covar_stringvalue_low.hardware_parameters["linear_acceleration_covariance_low"] =
+    "DEF";
+  EXPECT_EQ(init(linear_accel_covar_stringvalue_low), CallbackReturn::ERROR);
+
+  auto linear_accel_covar_stringvalue_medium = make_valid_imu_info();
+  linear_accel_covar_stringvalue_medium
+    .hardware_parameters["linear_acceleration_covariance_medium"] = "GHI";
+  EXPECT_EQ(init(linear_accel_covar_stringvalue_medium), CallbackReturn::ERROR);
+
+  auto linear_accel_covar_stringvalue_high = make_valid_imu_info();
+  linear_accel_covar_stringvalue_high.hardware_parameters["linear_acceleration_covariance_high"] =
+    "JKL";
+  EXPECT_EQ(init(linear_accel_covar_stringvalue_high), CallbackReturn::ERROR);
+}
+
+TEST(InitTest, ValidMagnetometerCovarianceParams) {
+  auto init = [](hardware_interface::HardwareInfo info) {
+    bno08x_try_hal_dynamic_covariance::BNO08XTryHalDynamicCovariance hw;
+    return hw.on_init(info);
+  };
+
+  auto magnetometer_covar_default_explicit = make_valid_imu_info();
+  magnetometer_covar_default_explicit.hardware_parameters["enable_magnetometer"] = "true";
+  magnetometer_covar_default_explicit.hardware_parameters["magnetometer_covariance_unreliable"] =
+    "0.00000000125";
+  magnetometer_covar_default_explicit.hardware_parameters["magnetometer_covariance_low"] =
+    "0.00000000025";
+  magnetometer_covar_default_explicit.hardware_parameters["magnetometer_covariance_medium"] =
+    "0.000000000050";
+  magnetometer_covar_default_explicit.hardware_parameters["magnetometer_covariance_high"] =
+    "0.000000000010";
+  EXPECT_EQ(init(magnetometer_covar_default_explicit), CallbackReturn::SUCCESS);
+
+  auto magnetometer_covar_nondefault = make_valid_imu_info();
+  magnetometer_covar_nondefault.hardware_parameters["enable_magnetometer"] = "true";
+  magnetometer_covar_nondefault.hardware_parameters["magnetometer_covariance_unreliable"] =
+    "1.25000000125";
+  magnetometer_covar_nondefault.hardware_parameters["magnetometer_covariance_low"] =
+    "2.50000000025";
+  magnetometer_covar_nondefault.hardware_parameters["magnetometer_covariance_medium"] =
+    "5.000000000050";
+  magnetometer_covar_nondefault.hardware_parameters["magnetometer_covariance_high"] =
+    "1.000000000010";
+  EXPECT_EQ(init(magnetometer_covar_nondefault), CallbackReturn::SUCCESS);
+}
+
+TEST(InitTest, InvalidMagnetometerCovarianceParamsFail) {
+  auto init = [](hardware_interface::HardwareInfo info) {
+    bno08x_try_hal_dynamic_covariance::BNO08XTryHalDynamicCovariance hw;
+    return hw.on_init(info);
+  };
 
   auto magnetometer_covar_stringvalue_unrel = make_valid_imu_info();
   magnetometer_covar_stringvalue_unrel.hardware_parameters["enable_magnetometer"] = "true";
