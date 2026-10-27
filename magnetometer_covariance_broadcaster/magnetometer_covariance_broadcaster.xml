@@ -1,0 +1,11 @@
+<library path="magnetometer_covariance_broadcaster">
+  <class name="magnetometer_covariance_broadcaster/MagnetometerCovarianceBroadcaster"
+         type="magnetometer_covariance_broadcaster::MagnetometerCovarianceBroadcaster"
+         base_class_type="controller_interface::ControllerInterface">
+  <description>
+      This controller publishes the readings of a magnetometer as sensor_msgs/msg/MagneticField message.
+      The covariance of the readings are dynamic (determined by the hardware interface).
+  </description>
+  </class>
+</library>
+
