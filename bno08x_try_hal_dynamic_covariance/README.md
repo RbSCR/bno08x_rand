@@ -162,14 +162,14 @@ The hardware parameters (see the hardware parameter table in original package) c
     something simular could be done for the new `imu_sensor_dynamic_covariance_broadcaster`
   - internet searching about the performance impact of multiple new fields in the state interface mentioned that it should have negligible impact
 - decided to use 1 covariance for each sensor instead of three matrix-diagonal values
-  - the related new `imu_sensor_covariance_broadcaster` expects 1 covariance for each sensor in the state interfaces
+  - the related new `imu_sensor_covariance_broadcaster` expects 1 covariance for each sensor (orientation, angular velocity, linear acceleration) in the state interfaces
+  - the related new `magnetometer_covariance_broadcaster` expects 1 covariance in the state interfaces
 
 ### Todo
 
-- the launch files still needs to be updated to use the `imu_sensor_covariance_broadcaster`
-- physical test: done > ok
-- when the physical test is ok the `magnetometer__covariance_broadcaster` package can be created
+- the launch files still needs to be updated to use the `magnetometer_covariance_broadcaster`
 
 ## Related research packages
 
 - [imu_sensor_covariance_broadcaster](../imu_sensor_covariance_broadcaster/README.md)
+- [magnetometer_covariance_broadcaster](../magnetometer_covariance_broadcaster/README.md)
