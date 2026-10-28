@@ -5,8 +5,6 @@ find_package(ros2_control_cmake REQUIRED)
 set_compiler_options()
 export_windows_symbols()
 
-# TODO update with depend for semantic component?
-# fmt pal_statistics
 set(THIS_PACKAGE_INCLUDE_DEPENDS
   controller_interface
   generate_parameter_library
