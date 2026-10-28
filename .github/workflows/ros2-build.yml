@@ -7,7 +7,7 @@ on:
     branches: [ main ]
 
 env:
-  MY_PACKAGES: bno08x_try_hal_dynamic_covariance imu_sensor_covariance_broadcaster
+  MY_PACKAGES: bno08x_try_hal_dynamic_covariance imu_sensor_covariance_broadcaster magnetometer_covariance_broadcaster
   # research of 'bno08x_try_sensor_status' has finished, no need to build anymore
 
 jobs:
