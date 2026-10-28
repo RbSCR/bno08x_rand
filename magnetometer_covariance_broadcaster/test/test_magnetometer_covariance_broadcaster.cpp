@@ -43,6 +43,9 @@ using controller_interface::activate_succeeds;
 using controller_interface::configure_succeeds;
 using controller_interface::deactivate_succeeds;
 
+using testing::IsEmpty;
+using testing::SizeIs;
+
 namespace
 {
 rclcpp::WaitResultKind wait_for(std::shared_ptr<rclcpp::SubscriptionBase> subscription) {
@@ -124,6 +127,9 @@ protected:
   const rclcpp::Parameter frame_id_param_ = rclcpp::Parameter("frame_id", frame_id_);
 
   const std::array<double, 4> sensor_values_ = {{20e-6, 30e-6, 40e-6, 50e-6}};
+  // Note: the covariance value (element 3) in the sensor_values_ array should be kept
+  // equal to the elements 0, 4 and 8 in the expect_covariance_arrays below.
+  const std::array<double, 9> expect_covar_ = {{50e-6, 0.0, 0.0, 0.0, 50e-6, 0.0, 0.0, 0.0, 50e-6}};
   hardware_interface::StateInterface::SharedPtr magnetic_field_x;
   hardware_interface::StateInterface::SharedPtr magnetic_field_y;
   hardware_interface::StateInterface::SharedPtr magnetic_field_z;
@@ -159,7 +165,37 @@ TEST_F(
 }
 
 TEST_F(
-  MagnetometerCovarianceBroadcasterTest, whenBroadcasterIsActiveShouldPublishWithCovarianceSet) {
+  MagnetometerCovarianceBroadcasterTest,
+  whenAllRequiredArgumentsAreSetThenInitConfigureActivateAndDeactivateShouldSucceed) {
+  const auto node_options =
+    create_node_options_with_overriden_parameters({sensor_name_param_, frame_id_param_});
+  const auto result = broadcaster->init(
+    create_ctrl_params(node_options, ros2_control_test_assets::minimal_robot_urdf));
+  ASSERT_EQ(result, controller_interface::return_type::OK);
+  ASSERT_TRUE(configure_succeeds(broadcaster));
+  ASSERT_TRUE(activate_succeeds(broadcaster));
+
+  // check interface configuration
+  auto cmd_if_conf = broadcaster->command_interface_configuration();
+  ASSERT_THAT(cmd_if_conf.names, IsEmpty());
+  EXPECT_EQ(cmd_if_conf.type, controller_interface::interface_configuration_type::NONE);
+  auto state_if_conf = broadcaster->state_interface_configuration();
+  ASSERT_THAT(state_if_conf.names, SizeIs(4lu));
+  EXPECT_EQ(state_if_conf.type, controller_interface::interface_configuration_type::INDIVIDUAL);
+
+  // deactivate
+  ASSERT_TRUE(deactivate_succeeds(broadcaster));
+
+  // check interface configuration again
+  cmd_if_conf = broadcaster->command_interface_configuration();
+  ASSERT_THAT(cmd_if_conf.names, IsEmpty());
+  EXPECT_EQ(cmd_if_conf.type, controller_interface::interface_configuration_type::NONE);
+  state_if_conf = broadcaster->state_interface_configuration();
+  ASSERT_THAT(state_if_conf.names, SizeIs(4lu));
+  EXPECT_EQ(state_if_conf.type, controller_interface::interface_configuration_type::INDIVIDUAL);
+}
+
+TEST_F(MagnetometerCovarianceBroadcasterTest, whenBroadcasterIsActiveShouldPublishWithCovariance) {
   const auto node_options =
     create_node_options_with_overriden_parameters({sensor_name_param_, frame_id_param_});
   const auto result = broadcaster->init(
@@ -175,11 +211,8 @@ TEST_F(
   EXPECT_EQ(msg.magnetic_field.y, sensor_values_[1]);
   EXPECT_EQ(msg.magnetic_field.z, sensor_values_[2]);
 
-  const std::array<double, 9> exp_covar = {{50e-6, 0.0, 0.0, 0.0, 50e-6, 0.0, 0.0, 0.0, 50e-6}};
-  ASSERT_THAT(msg.magnetic_field_covariance, ::testing::ElementsAreArray(exp_covar));
+  ASSERT_THAT(msg.magnetic_field_covariance, ::testing::ElementsAreArray(expect_covar_));
 }
-
-// TODO(rbscr)  check nog meer tests?
 
 int main(int argc, char ** argv) {
   ::testing::InitGoogleMock(&argc, argv);
