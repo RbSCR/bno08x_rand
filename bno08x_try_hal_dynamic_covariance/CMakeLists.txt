@@ -100,14 +100,28 @@ if(BUILD_TESTING)
   # Python launch tests — full stack against real BNO08X hardware or mock mode.
   # Uses enable_mock_mode:=true when the sensor is absent so CI always runs all tests.
 
+  # Tests with standard ROS2 Control broadcasters
+
   # Tests without magnetometer broadcaster; ROS2 Control IMU broadcaster is always spawned
   add_launch_test(test/test_hal_bno08x.launch.py)
 
-  # Tests with ROS2 Control IMU broadcaster and ROS2 COntrol magnetometer broadcaster
+  # Tests with ROS2 Control IMU broadcaster and ROS2 Control magnetometer broadcaster
   add_launch_test(test/test_hal_bno08x_magnetometer.launch.py)
 
   # Tests with 'fixed' hardware parameters and without magnetometer broadcaster; Ros2 Control IMU broadcaster is always spawned
   add_launch_test(test/test_hal_bno08x_fixedhwparams.launch.py)
+
+
+  # Tests with the new 'covariance' broadcasters
+
+  # Tests without magnetometer broadcaster; imu_sensor_covariance_broadcaster is always spawned
+  add_launch_test(test/test_hal_covariance_bno08x.launch.py)
+
+  # Tests with imu_sensor_covariance_broadcaster and magnetometer covariance_broadcaster
+  add_launch_test(test/test_hal_covariance_bno08x_magnetometer.launch.py)
+
+  # Tests with 'fixed' hardware parameters and without magnetometer broadcaster; imu_sensor_covariance_broadcaster is always spawned
+  add_launch_test(test/test_hal_covariance_bno08x_fixedhwparams.launch.py)
 
 endif()
 

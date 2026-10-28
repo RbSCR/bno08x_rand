@@ -304,10 +304,10 @@ def generate_launch_description():
     )
 
     # Optional: Magnetometer broadcaster spawner
-    magnetometer_broadcaster_spawner = Node(
+    magnetometer_covariance_broadcaster_spawner = Node(
         package='controller_manager',
         executable='spawner',
-        arguments=['magnetometer_broadcaster', '--controller-manager', '/controller_manager'],
+        arguments=['magnetometer_covariance_broadcaster', '--controller-manager', '/controller_manager'],
         condition=IfCondition(broadcast_magnetometer)
     )
 
@@ -327,7 +327,7 @@ def generate_launch_description():
             controller_manager_node,
             state_interfaces_spawner,
             imu_covariance_broadcaster_spawner,
-            magnetometer_broadcaster_spawner,
+            magnetometer_covariance_broadcaster_spawner,
             imu_hal_tf_broadcaster_node,
         ]
     )

@@ -7,8 +7,8 @@ controller_manager:
       type: imu_sensor_covariance_broadcaster/IMUSensorCovarianceBroadcaster
 
     # Magnetometer Broadcaster - Publishes sensor_msgs/MagneticField to magnetometer_broadcaster/magnetic_field
-    magnetometer_broadcaster:
-      type: magnetometer_broadcaster/MagnetometerBroadcaster
+    magnetometer_covariance_broadcaster:
+      type: magnetometer_covariance_broadcaster/MagnetometerCovarianceBroadcaster
 
     # State Interfaces Broadcaster - Publishes the state interfaces
     state_interfaces_broadcaster:
@@ -30,25 +30,11 @@ imu_sensor_covariance_broadcaster:
     #   pitch: 0.0  # radians
     #   yaw:   0.0  # radians
 
-magnetometer_broadcaster:
+magnetometer_covariance_broadcaster:
   ros__parameters:
     sensor_name: bno08x  # Must match the <sensor name="..."> in the URDF ros2_control block
     frame_id: imu_frame  # Sensor’s frame_id in which values are published
 
-    ## (high accuracy)
-    #static_covariance: [1.0e-11, 0.0,     0.0,
-    #                    0.0,     1.0e-11, 0.0,
-    #                    0.0,     0.0,     1.1e-11]
-
-    # (medium accuracy)
-    static_covariance: [5.0e-11, 0.0,     0.0,
-                        0.0,     5.0e-11, 0.0,
-                        0.0,     0.0,     5.0e-11]
-
-    ## (low accuracy)
-    #static_covariance: [2.5e-10, 0.0,     0.0,
-    #                    0.0,     2.5e-10, 0.0,
-    #                    0.0,     0.0,     2.5e-10]
 
 # State Interfaces Broadcaster configuration
 # Publishes the state interfaces mentioned in the ros-parameters below

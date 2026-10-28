@@ -19,9 +19,14 @@
   <depend>tf2_ros</depend>
 
   <exec_depend>controller_manager</exec_depend>
+  <!-- Note: dependency on both the ROS2 Control imu_sensor_broadcaster and the new -->
+  <!-- imu_sensor_covariance_broadcaster for testing/comparing purposes-->
   <exec_depend>imu_sensor_broadcaster</exec_depend>
   <exec_depend>imu_sensor_covariance_broadcaster</exec_depend>
+  <!-- Note: dependency on both the ROS2 Control magnetometer_broadcaster and the new -->
+  <!-- magnetometer_covariance_broadcaster for testing/comparing purposes-->
   <exec_depend>magnetometer_broadcaster</exec_depend>
+  <exec_depend>magnetometer_covariance_broadcaster</exec_depend>
   <exec_depend>robot_state_publisher</exec_depend>
   <exec_depend>state_interfaces_broadcaster</exec_depend>
   <exec_depend>xacro</exec_depend>

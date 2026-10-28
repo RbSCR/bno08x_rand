@@ -79,7 +79,7 @@ def generate_launch_description():
 
     # Controller configuration
     controller_config = PathJoinSubstitution(
-        [FindPackageShare('bno08x_try_hal_dynamic_covariance'), 'config', 'imu_hal_broadcaster.yaml']
+        [FindPackageShare('bno08x_try_hal_dynamic_covariance'), 'config', 'imu_hal_covariance_broadcaster.yaml']
     )
 
     # Controller manager (ros2_control_node)
