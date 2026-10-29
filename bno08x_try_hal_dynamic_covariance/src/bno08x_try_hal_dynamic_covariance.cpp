@@ -424,7 +424,7 @@ hardware_interface::CallbackReturn BNO08XTryHalDynamicCovariance::on_configure(
     hw_orientation_x_ = 0.0;
     hw_orientation_y_ = 0.0;
     hw_orientation_z_ = 0.0;
-    hw_orientation_covariance_ = 0.0;  // TODO(rbscr) replace 0.0 with a "good" covariance value
+    hw_orientation_covariance_ = accuracy_orientation_covariance_[0];
 
     // Angular velocity and linear acceleration stay at 0.0 (correct for a stationary mock).
     return hardware_interface::CallbackReturn::SUCCESS;
@@ -542,6 +542,7 @@ void BNO08XTryHalDynamicCovariance::init_sensor() {
   }
 
   bool imu_report_issues{false};
+  RCLCPP_INFO(logger_, "Enabling IMU reports");
   if (!bno08x_->enable_report(SH2_ROTATION_VECTOR, 1000000 / imu_rate_ /* Hz to us */)) {
     RCLCPP_ERROR(logger_, "Failed to enable rotation vector sensor");
     imu_report_issues = true;
@@ -560,7 +561,7 @@ void BNO08XTryHalDynamicCovariance::init_sensor() {
   }
 
   if (enable_magnetometer_) {
-    RCLCPP_INFO(logger_, "Enabling magnetometer");
+    RCLCPP_INFO(logger_, "Enabling magnetometer report");
     if (!bno08x_->enable_report(
           SH2_MAGNETIC_FIELD_CALIBRATED, 1000000 / magnetometer_rate_ /* Hz to us */)) {
       RCLCPP_ERROR(logger_, "Failed to enable magnetometer. Continuing without magnetometer.");
@@ -663,15 +664,15 @@ void BNO08XTryHalDynamicCovariance::close_hardware() {
   hw_linear_acceleration_x_ = 0.0;
   hw_linear_acceleration_y_ = 0.0;
   hw_linear_acceleration_z_ = 0.0;
-  hw_orientation_covariance_ = 0.0;
-  hw_angular_velocity_covariance_ = 0.0;
-  hw_linear_acceleration_covariance_ = 0.0;
+  hw_orientation_covariance_ = accuracy_orientation_covariance_[0];
+  hw_angular_velocity_covariance_ = accuracy_angular_velocity_covariance_[0];
+  hw_linear_acceleration_covariance_ = accuracy_linear_acceleration_covariance_[0];
 
   if (enable_magnetometer_) {
     hw_magnetic_field_x_ = 0.0;
     hw_magnetic_field_y_ = 0.0;
     hw_magnetic_field_z_ = 0.0;
-    hw_magnetic_field_covariance_ = 0.0;
+    hw_magnetic_field_covariance_ = accuracy_magnetometer_covariance_[0];
   }
 }
 

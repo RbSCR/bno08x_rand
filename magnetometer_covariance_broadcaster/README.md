@@ -1,6 +1,6 @@
 # magnetometer_covariance_broadcaster
 
-![Project Status](https://img.shields.io/badge/Status-Work%20In%20Progress-orange)
+![Project Status](https://img.shields.io/badge/Research%20status-Finished-green)
 ![ROS 2](https://img.shields.io/badge/ROS%202-Jazzy%20|%20Kilted%20(Ubuntu%2024.04)-blue?style=flat&logo=ros&logoSize=auto)
 ![C++](https://img.shields.io/badge/C++-17-blue?style=flat&logo=cplusplus&logoColor=white)
 ![License](https://img.shields.io/github/license/rbscr/bno08x_rand?label=License)
@@ -12,7 +12,6 @@
     - [State interfaces](#state-interfaces)
     - [PluginLib library](#pluginlib-library)
     - [Launch files](#launch-files)
-  - [Status / progess](#status--progess)
   - [Related to research package](#related-to-research-package)
 
 ## Package magnetometer_covariance_broadcaster
@@ -61,10 +60,6 @@ Plugin: magnetometer_covariance_broadcaster/MagnetometerCovarianceBroadcaster (c
 
 This package has no launch files.
 The related research package will have a launch-file to launch the broadcaster in this package.
-
-## Status / progess
-
-- Work in progress
 
 ## Related to research package
 

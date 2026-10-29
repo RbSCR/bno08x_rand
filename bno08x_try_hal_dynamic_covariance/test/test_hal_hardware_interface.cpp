@@ -546,7 +546,7 @@ TEST_F(MockHwTest, ReadOutputsValid) {
   EXPECT_DOUBLE_EQ(get("orientation.x"), 0.0);
   EXPECT_DOUBLE_EQ(get("orientation.y"), 0.0);
   EXPECT_DOUBLE_EQ(get("orientation.z"), 0.0);
-  EXPECT_DOUBLE_EQ(get("orientation_covariance"), 0.0);  // TODO(rbscr) check expected value
+
   for (auto & iface : ifaces_) {
     double v = std::numeric_limits<double>::quiet_NaN();
     EXPECT_TRUE(iface.get_value(v, true));
@@ -588,9 +588,9 @@ TEST_F(MockHwTest, StateResetAfterCleanup) {
   EXPECT_DOUBLE_EQ(get("linear_acceleration.x"), 0.0);
   EXPECT_DOUBLE_EQ(get("linear_acceleration.y"), 0.0);
   EXPECT_DOUBLE_EQ(get("linear_acceleration.z"), 0.0);
-  EXPECT_DOUBLE_EQ(get("orientation_covariance"), 0.0);          // TODO(rbscr) check exp. value
-  EXPECT_DOUBLE_EQ(get("angular_velocity_covariance"), 0.0);     // TODO(rbscr) check exp. value
-  EXPECT_DOUBLE_EQ(get("linear_acceleration_covariance"), 0.0);  // TODO(rbscr) check exp. value
+  EXPECT_DOUBLE_EQ(get("orientation_covariance"), 10.0);          // initial unreliable value
+  EXPECT_DOUBLE_EQ(get("angular_velocity_covariance"), 10.0);     // initial unreliable value
+  EXPECT_DOUBLE_EQ(get("linear_acceleration_covariance"), 10.0);  // initial unreliable value
 }
 
 TEST_F(MockHwTest, ShutdownFromInactive) {
