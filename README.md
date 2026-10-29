@@ -14,8 +14,15 @@ Meta reposity with "research" repositories related to the BNO08x IMU sensor.
 
 Ongoing research:
 
-- [bno08x_try_hal_dynamic_covariance](bno08x_try_hal_dynamic_covariance/README.md)
+- None
+
+On hold research:
+
+- [imu_sensor_covariance_static_and_dynamic_broadcaster](imu_sensor_covariance_static_and_dynamic_broadcaster/README.md)
 
 Finished research:
 
 - [bno08x_try_sensor_status](bno08x_try_sensor_status/README.md)
+- [bno08x_try_hal_dynamic_covariance](bno08x_try_hal_dynamic_covariance/README.md)
+  - [imu_sensor_covariance_broadcaster](imu_sensor_covariance_broadcaster/README.md)
+  - [magnetometer_covariance_broadcaster](magnetometer_covariance_broadcaster/README.md)
