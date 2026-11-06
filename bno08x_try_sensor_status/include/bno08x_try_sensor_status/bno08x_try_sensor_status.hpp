@@ -22,7 +22,9 @@
 #include <string>
 
 #include "rcl_interfaces/msg/parameter_descriptor.hpp"
-#include "rclcpp/rclcpp.hpp"
+#include "rclcpp/node.hpp"
+#include "rclcpp/publisher.hpp"
+#include "rclcpp/executors.hpp"
 
 #include "bno08x_imu_msgs/msg/imu_with_status.hpp"
 #include "bno08x_imu_msgs/msg/magnetic_field_with_status.hpp"
